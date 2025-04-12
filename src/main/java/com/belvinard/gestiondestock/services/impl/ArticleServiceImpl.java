@@ -14,6 +14,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -31,7 +33,7 @@ public class ArticleServiceImpl implements ArticleService {
         this.modelMapper = modelMapper;
     }
 
-
+   /* ================== CREATE ARTICLE ================== */
     @Override
     public ArticleDTO createArticle(Long entrepriseId, Long categoryId, ArticleDTO articleDTO) {
 
@@ -67,6 +69,28 @@ public class ArticleServiceImpl implements ArticleService {
 
         return responseDTO;
     }
+
+    /* ================== GET ALL ARTICLES ================== */
+    @Override
+    public List<ArticleDTO> getAllArticles() {
+        List<Article> articles = articleRepository.findAll();
+
+        return articles.stream().map(article -> {
+            ArticleDTO dto = modelMapper.map(article, ArticleDTO.class);
+
+            if (article.getEntreprise() != null) {
+                dto.setEntrepriseId(article.getEntreprise().getId());
+            }
+
+            if (article.getCategory() != null) {
+                dto.setCategoryId(article.getCategory().getId());
+                dto.setCategoryDetails(modelMapper.map(article.getCategory(), CategoryDTO.class));
+            }
+
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
 
 
 

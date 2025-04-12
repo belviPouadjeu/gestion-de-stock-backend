@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/articles")
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ public class ArticleController {
 
     private final ArticleService articleService;
 
+    /* ================== CREATE ARTICLE ================== */
     @Operation(summary = "Créer un nouvel article")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Article créé avec succès"),
@@ -33,4 +36,17 @@ public class ArticleController {
         ArticleDTO createdArticle = articleService.createArticle(entrepriseId, categoryId, articleDTO);
         return new ResponseEntity<>(createdArticle, HttpStatus.CREATED);
     }
+
+    /* ================== GET ALL ARTICLES ================== */
+    @Operation(summary = "Récupérer la liste de tous les articles")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Liste des articles récupérée avec succès")
+    })
+    @GetMapping("/articles")
+    public ResponseEntity<List<ArticleDTO>> getAllArticles() {
+        List<ArticleDTO> articles = articleService.getAllArticles();
+        return ResponseEntity.ok(articles);
+    }
+
+
 }

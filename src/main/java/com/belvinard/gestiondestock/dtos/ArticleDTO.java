@@ -6,6 +6,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,22 +24,25 @@ public class ArticleDTO {
     @Schema(hidden = true)
     private Long id;
 
-    @Column(name = "codearticle")
+    @NotBlank(message = "Le code de l'article est obligatoire")
+    @Size(min = 4, max = 50, message = "Le code article doit etre entre 4 et 50 caractères")
     private String codeArticle;
 
-    @Column(name = "designation")
+    @NotBlank(message = "La désignation est obligatoire")
+    @Size(min = 4, max = 100, message = "La désignation doit etre entre 4 et 100 caractères")
     private String designation;
 
-    @Column(name = "prixunitaireht")
+    @NotNull(message = "Le prix unitaire HT est obligatoire")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Le prix unitaire HT doit être positif")
     private BigDecimal prixUnitaireHt;
 
-    @Column(name = "tauxtva")
+    @NotNull(message = "Le taux de TVA est obligatoire")
+    @DecimalMin(value = "0.0", message = "Le taux de TVA ne peut pas être négatif")
     private BigDecimal tauxTva;
 
-    @Column(name = "prixunitairettc")
+    // Le prix TTC peut être calculé automatiquement, donc pas forcément à valider ici
     private BigDecimal prixUnitaireTtc;
 
-    @Column(name = "photo")
     private String photo;
 
     @Schema(hidden = true)
@@ -46,6 +53,5 @@ public class ArticleDTO {
 
     @Schema(hidden = true)
     private Long entrepriseId;
-
-
 }
+
