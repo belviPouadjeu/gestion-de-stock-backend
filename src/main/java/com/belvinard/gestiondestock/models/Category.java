@@ -25,7 +25,7 @@ public class Category extends AbstractEntity{
     @JoinColumn(name = "entrepriseiId")
     private Entreprise entreprise;
 
-//    @OneToMany(mappedBy = "category")
-//    private List<Article> articles;
+    @OneToMany(mappedBy = "category")
+    private List<Article> articles;
 
 }
