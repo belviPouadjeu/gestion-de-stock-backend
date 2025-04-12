@@ -6,6 +6,6 @@ import com.belvinard.gestiondestock.responses.EntrepriseResponse;
 public interface EntrepriseService {
     EntrepriseDTO createEntreprise(EntrepriseDTO entrepriseDTO);
     EntrepriseResponse getAllEntreprises();
-    EntrepriseDTO findEntrepriseById(Integer id);
-    EntrepriseDTO deleteEntreprise(Integer id);
+    EntrepriseDTO findEntrepriseById(Long id);
+    EntrepriseDTO deleteEntreprise(Long id);
 }

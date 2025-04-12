@@ -58,14 +58,14 @@ public class EntrepriseServiceImpl implements EntrepriseService {
     }
 
     @Override
-    public EntrepriseDTO findEntrepriseById(Integer id) {
+    public EntrepriseDTO findEntrepriseById(Long id) {
         Entreprise entreprise = entepriseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Entreprise with id " + id + " not found !!"));
         return modelMapper.map(entreprise, EntrepriseDTO.class);
     }
 
     @Override
-    public EntrepriseDTO deleteEntreprise(Integer id) {
+    public EntrepriseDTO deleteEntreprise(Long id) {
         Entreprise entreprise = entepriseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Entreprise with id " + id + " not found !!"));
         // Convert to DTO before deletion for return

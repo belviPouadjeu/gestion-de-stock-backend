@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EntrepriseDTO {
-    private Integer id;
+    private Long id;
 
     @NotBlank(message = "Le nom de l'entreprise est obligatoire")
     @Size(min = 5, max = 100, message = "Le nom doit contenir entre 2 et 100 caractères")
