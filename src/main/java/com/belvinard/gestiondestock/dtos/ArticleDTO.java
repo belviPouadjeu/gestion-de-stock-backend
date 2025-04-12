@@ -16,6 +16,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArticleDTO {
+
+    @Schema(hidden = true)
+    private Long id;
+
     @Column(name = "codearticle")
     private String codeArticle;
 
@@ -34,9 +38,14 @@ public class ArticleDTO {
     @Column(name = "photo")
     private String photo;
 
-
+    @Schema(hidden = true)
     private Long categoryId;
 
     @Schema(hidden = true)
+    private CategoryDTO categoryDetails;
+
+    @Schema(hidden = true)
     private Long entrepriseId;
+
+
 }
