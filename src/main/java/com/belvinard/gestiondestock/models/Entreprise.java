@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "entreprise")
 public class Entreprise extends AbstractEntity {
 
-  private Integer id;
+  private Long id;
 
   @NotBlank(message = "Le nom de l'entreprise est obligatoire")
   @Size(min = 4, max = 100, message = "Le nom doit contenir entre 4 et 100 caractères")
@@ -47,7 +47,5 @@ public class Entreprise extends AbstractEntity {
   @Size(max = 150, message = "Le site web doit contenir au maximum 150 caractères")
   private String steWeb;
 
-//  public String getNom() {
-//    return nom;
-//  }
+
 }

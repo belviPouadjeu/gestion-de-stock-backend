@@ -7,6 +7,7 @@ import com.belvinard.gestiondestock.responses.EntrepriseResponse;
 import com.belvinard.gestiondestock.responses.MyErrorResponses;
 import com.belvinard.gestiondestock.services.EntrepriseService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -96,11 +97,20 @@ public class EntrepriseControllers {
         return new ResponseEntity<>(entreprises, HttpStatus.OK);
     }
 
+    @Operation(summary = "Récupère une entreprise par son ID", description = "Cette méthode permet de récupérer une entreprise en fonction de son ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Entreprise trouvée avec succès"),
+            @ApiResponse(responseCode = "404", description = "Entreprise non trouvée"),
+            @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<EntrepriseDTO> getEntrepriseById(@PathVariable Integer id) {
+    public ResponseEntity<EntrepriseDTO> getEntrepriseById(
+            @Parameter(description = "ID de l'entreprise à récupérer", required = true) @PathVariable Long id) {
         EntrepriseDTO entreprise = entrepriseService.findEntrepriseById(id);
         return ResponseEntity.ok(entreprise);
     }
+
+
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<MyErrorResponses> handleResourceNotFoundException(ResourceNotFoundException ex) {
