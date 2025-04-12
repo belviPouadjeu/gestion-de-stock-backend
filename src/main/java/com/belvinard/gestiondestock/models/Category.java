@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,5 +24,8 @@ public class Category extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "entrepriseiId")
     private Entreprise entreprise;
+
+//    @OneToMany(mappedBy = "category")
+//    private List<Article> articles;
 
 }
