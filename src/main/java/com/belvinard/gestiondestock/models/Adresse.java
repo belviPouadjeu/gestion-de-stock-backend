@@ -1,6 +1,5 @@
 package com.belvinard.gestiondestock.models;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

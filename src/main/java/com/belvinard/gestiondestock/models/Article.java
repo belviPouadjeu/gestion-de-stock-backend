@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -41,6 +42,18 @@ public class Article extends AbstractEntity {
   @ManyToOne
   @JoinColumn(name = "entrepriseiId")
   private Entreprise entreprise;
+
+  @OneToMany(mappedBy = "article")
+  private List<LigneVente> ligneVentes;
+
+  @OneToMany(mappedBy = "article")
+  private List<LigneCommandeClient> ligneCommandeClients;
+
+  @OneToMany(mappedBy = "article")
+  private List<LigneCommandeFournisseur> ligneCommandeFournisseurs;
+
+  @OneToMany(mappedBy = "article")
+  private List<MvtStk> mvtStks;
 
 
 
