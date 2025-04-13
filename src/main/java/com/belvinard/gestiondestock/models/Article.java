@@ -1,6 +1,10 @@
 package com.belvinard.gestiondestock.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,30 +21,37 @@ import java.util.List;
 @Table(name = "article")
 public class Article extends AbstractEntity {
 
-  @Column(name = "codearticle")
+  @NotBlank(message = "Le code article est obligatoire")
+  @Size(min = 4, max = 50, message = "Le code article doit etre entre 4 et 50 caractères")
+  @Column(name = "codearticle", nullable = false, unique = true)
   private String codeArticle;
 
-  @Column(name = "designation")
+  @NotBlank(message = "La désignation est obligatoire")
+  @Size(min = 4, max = 100, message = "La désignation doit etre entre 4 et 100 caractères")
+  @Column(name = "designation", nullable = false)
   private String designation;
 
-  @Column(name = "prixunitaireht")
+  @NotNull(message = "Le prix unitaire HT est obligatoire")
+  @DecimalMin(value = "0.0", inclusive = false, message = "Le prix unitaire HT doit être positif")
+  @Column(name = "prixunitaireht", nullable = false)
   private BigDecimal prixUnitaireHt;
 
-  @Column(name = "tauxtva")
+  @NotNull(message = "Le taux de TVA est obligatoire")
+  @DecimalMin(value = "0.0", message = "Le taux de TVA ne peut pas être négatif")
+  @Column(name = "tauxtva", nullable = false)
   private BigDecimal tauxTva;
 
   @Column(name = "prixunitairettc")
   private BigDecimal prixUnitaireTtc;
 
-  @Column(name = "photo")
   private String photo;
 
-  @ManyToOne
-  @JoinColumn(name = "idcategory")
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "idcategory", nullable = false)
   private Category category;
 
-  @ManyToOne
-  @JoinColumn(name = "entrepriseiId")
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "entrepriseiId", nullable = false)
   private Entreprise entreprise;
 
   @OneToMany(mappedBy = "article")
@@ -54,7 +65,4 @@ public class Article extends AbstractEntity {
 
   @OneToMany(mappedBy = "article")
   private List<MvtStk> mvtStks;
-
-
-
 }
