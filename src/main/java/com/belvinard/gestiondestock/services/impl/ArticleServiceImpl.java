@@ -91,6 +91,47 @@ public class ArticleServiceImpl implements ArticleService {
         }).collect(Collectors.toList());
     }
 
+    /* ================== DELETE ARTICLE ================== */
+
+    @Override
+    public ArticleDTO deleteArticle(Long id) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Article", "id", id));
+
+        ArticleDTO dto = modelMapper.map(article, ArticleDTO.class);
+
+        if (article.getEntreprise() != null) {
+            dto.setEntrepriseId(article.getEntreprise().getId());
+        }
+
+        if (article.getCategory() != null) {
+            dto.setCategoryId(article.getCategory().getId());
+            dto.setCategoryDetails(modelMapper.map(article.getCategory(), CategoryDTO.class));
+        }
+
+        articleRepository.delete(article);
+
+        return dto;
+    }
+
+
+    /* ================== FIND ARTICLE BY ID ================== */
+    @Override
+    public ArticleDTO findById(Long id) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Article", "id", id));
+
+        ArticleDTO dto = modelMapper.map(article, ArticleDTO.class);
+
+        if (article.getCategory() != null) {
+            dto.setCategoryId(article.getCategory().getId());
+            dto.setCategoryDetails(modelMapper.map(article.getCategory(), CategoryDTO.class));
+        }
+
+        dto.setEntrepriseId(article.getEntreprise().getId());
+
+        return dto;
+    }
 
 
 

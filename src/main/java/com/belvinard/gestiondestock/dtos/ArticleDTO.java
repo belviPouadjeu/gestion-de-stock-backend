@@ -1,11 +1,6 @@
 package com.belvinard.gestiondestock.dtos;
 
-import com.belvinard.gestiondestock.models.Category;
-import com.belvinard.gestiondestock.models.Entreprise;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -53,5 +49,11 @@ public class ArticleDTO {
 
     @Schema(hidden = true)
     private Long entrepriseId;
+
+    @Schema(hidden = true)
+    private LocalDateTime creationDate;
+
+    @Schema(hidden = true)
+    private LocalDateTime lastModifiedDate;
 }
 
