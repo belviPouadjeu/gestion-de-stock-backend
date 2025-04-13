@@ -1,6 +1,9 @@
 package com.belvinard.gestiondestock.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,9 +20,13 @@ import java.util.List;
 @Table(name = "commandeclient")
 public class CommandeClient extends AbstractEntity {
 
+  @NotBlank(message = "Le code de la commande est obligatoire")
+  @Size(min = 4, max = 50,
+          message = "Le code de la commande doit contenir entre 4 et 50 caractères")
   @Column(name = "code")
   private String code;
 
+  @NotNull(message = "La date de commande est obligatoire")
   @Column(name = "datecommande")
   private LocalDateTime dateCommande;
 

@@ -21,11 +21,11 @@ public class Adresse implements Serializable {
   @Size(min = 5, max = 100, message = "L'adresse 1 doit contenir entre 5 et 100 caractères")
   private String adresse1;
 
-  @Size(max = 100, message = "L'adresse 2 doit contenir au maximum 100 caractères")
+  @Size(min = 4,  message = "L'adresse 2 doit contenir au moins 4 caractères")
   private String adresse2;
 
   @NotBlank(message = "La ville est obligatoire")
-  @Size(min = 2, max = 50, message = "La ville doit contenir entre 2 et 50 caractères")
+  @Size(min = 4, max = 50, message = "La ville doit contenir entre 4 et 50 caractères")
   private String ville;
 
   @NotBlank(message = "Le code postal est obligatoire")

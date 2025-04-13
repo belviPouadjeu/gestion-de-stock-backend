@@ -1,6 +1,8 @@
 package com.belvinard.gestiondestock.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,24 +19,31 @@ import java.time.LocalDateTime;
 @Table(name = "mvtstk")
 public class MvtStk extends AbstractEntity {
 
+  @NotNull(message = "La date du mouvement est obligatoire")
   @Column(name = "datemvt")
   private LocalDateTime dateMvt;
 
+  @NotNull(message = "La quantité est obligatoire")
+  @DecimalMin(value = "0.01", message = "La quantité doit être supérieure à zéro")
   @Column(name = "quantite")
   private BigDecimal quantite;
 
+  @NotNull(message = "L'article est obligatoire")
   @ManyToOne
   @JoinColumn(name = "idarticle")
   private Article article;
 
-  @Column(name = "typemvt")
+  @NotNull(message = "Le type de mouvement est obligatoire")
   @Enumerated(EnumType.STRING)
+  @Column(name = "typemvt")
   private TypeMvtStk typeMvt;
 
-  @Column(name = "sourcemvt")
+  @NotNull(message = "La source du mouvement est obligatoire")
   @Enumerated(EnumType.STRING)
+  @Column(name = "sourcemvt")
   private SourceMvtStk sourceMvt;
 
+  @NotNull(message = "L'entreprise est obligatoire")
   @Column(name = "identreprise")
-  private Long idEntreprise;
+  private Long entrepriseId;
 }
