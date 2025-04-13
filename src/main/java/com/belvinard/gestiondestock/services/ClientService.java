@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface ClientService {
 
-  ClientDTO createClient(ClientDTO clientDTO);
-
-  ClientDTO findById(Long id);
+  ClientDTO createClient(Long entrepriseId, ClientDTO clientDTO);
+  
+  ClientDTO findByClientId(Long id);
 
   List<ClientDTO> getAllClients();
 
-  ClientDTO delete(Long id);
+  ClientDTO deleteClient(Long id);
 
 }
