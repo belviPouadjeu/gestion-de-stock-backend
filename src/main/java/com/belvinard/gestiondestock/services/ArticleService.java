@@ -12,9 +12,10 @@ public interface ArticleService {
 
  ArticleDTO deleteArticle(Long id);
  ArticleDTO findById(Long id);
-//  ArticleDTO findByCodeArticle(String codeArticle);
-// List<ArticleDTO> findAllArticleByIdCategory(Long idCategory);
-//
+
+ ArticleDTO findByCodeArticle(String codeArticle);
+ List<ArticleDTO> findAllArticleByIdCategory(Long idCategory);
+
 //  List<LigneVenteDTO> findHistoriqueVentes(Long idArticle);
 //
 //  List<LigneCommandeClientDTO> findHistoriaueCommandeClient(Long idArticle);

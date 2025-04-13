@@ -83,6 +83,28 @@ public class ArticleController {
         return ResponseEntity.ok(deleted);
     }
 
+    /**
+     * Récupère un article par son codeArticle (ex: "ART-123")
+     */
+    @GetMapping("/code/{codeArticle}")
+    @Operation(summary = "Rechercher un article par code",
+            description = "Retourne un article à partir de son code article (insensible à la casse)")
+    public ResponseEntity<ArticleDTO> findByCodeArticle(@PathVariable String codeArticle) {
+        ArticleDTO articleDTO = articleService.findByCodeArticle(codeArticle);
+        return ResponseEntity.ok(articleDTO);
+    }
+
+    /**
+     * Récupère tous les articles associés à une catégorie spécifique
+     */
+    @GetMapping("/category/{idCategory}")
+    @Operation(summary = "Lister les articles d'une catégorie",
+            description = "Retourne la liste des articles appartenant à la catégorie donnée")
+    public ResponseEntity<List<ArticleDTO>> findAllByCategory(@PathVariable Long idCategory) {
+        List<ArticleDTO> articles = articleService.findAllArticleByIdCategory(idCategory);
+        return ResponseEntity.ok(articles);
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<MyErrorResponses> handleResourceNotFoundException(ResourceNotFoundException ex) {
         MyErrorResponses errorResponse = new MyErrorResponses("NOT_FOUND", ex.getMessage());

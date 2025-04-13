@@ -133,6 +133,49 @@ public class ArticleServiceImpl implements ArticleService {
         return dto;
     }
 
+    /* ================== FIND ARTICLE BY CODE ================== */
+
+    @Override
+    public ArticleDTO findByCodeArticle(String codeArticle) {
+        // Vérifie si l'article existe avec le code fourni
+        Article article = articleRepository.findByCodeArticleIgnoreCase(codeArticle)
+                .orElseThrow(() -> new ResourceNotFoundException("Article", "codeArticle", codeArticle));
+
+        // Mapping vers le DTO
+        ArticleDTO dto = modelMapper.map(article, ArticleDTO.class);
+
+        // Ajout des infos enrichies
+        if (article.getCategory() != null) {
+            dto.setCategoryId(article.getCategory().getId());
+            dto.setCategoryDetails(modelMapper.map(article.getCategory(), CategoryDTO.class));
+        }
+
+        dto.setEntrepriseId(article.getEntreprise().getId());
+
+        return dto;
+    }
+
+
+    /* ================== FIND ARTICLE BY CATEGORY ================== */
+
+    @Override
+    public List<ArticleDTO> findAllArticleByIdCategory(Long idCategory) {
+        // Vérifie si la catégorie existe
+        Category category = categoryRepository.findById(idCategory)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "id", idCategory));
+
+        // Récupère tous les articles liés à cette catégorie
+        List<Article> articles = articleRepository.findAllByCategoryId(idCategory);
+
+        // Transforme chaque entité en DTO enrichi
+        return articles.stream().map(article -> {
+            ArticleDTO dto = modelMapper.map(article, ArticleDTO.class);
+            dto.setCategoryId(idCategory);
+            dto.setCategoryDetails(modelMapper.map(category, CategoryDTO.class));
+            dto.setEntrepriseId(article.getEntreprise().getId());
+            return dto;
+        }).collect(Collectors.toList());
+    }
 
 
 

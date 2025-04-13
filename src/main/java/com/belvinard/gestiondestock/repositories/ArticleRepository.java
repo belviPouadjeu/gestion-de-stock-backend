@@ -12,4 +12,5 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
   List<Article> findAllByCategoryId(Long idCategory);
 
+  Optional<Article> findByCodeArticleIgnoreCase(String codeArticle);
 }
