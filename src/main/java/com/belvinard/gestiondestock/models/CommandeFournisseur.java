@@ -33,6 +33,8 @@ public class CommandeFournisseur extends AbstractEntity {
   private EtatCommande etatCommande;
 
   @NotNull(message = "Le fournisseur est obligatoire")
+  @ManyToOne
+  @JoinColumn(name = "fournisseur_id")
   private Fournisseur fournisseur;
 
   @NotNull(message = "L'ID de l'entreprise est obligatoire")
