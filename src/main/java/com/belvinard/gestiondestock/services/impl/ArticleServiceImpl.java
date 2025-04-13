@@ -1,14 +1,10 @@
 package com.belvinard.gestiondestock.services.impl;
 
-import com.belvinard.gestiondestock.dtos.ArticleDTO;
-import com.belvinard.gestiondestock.dtos.CategoryDTO;
+import com.belvinard.gestiondestock.dtos.*;
+import com.belvinard.gestiondestock.exceptions.APIException;
 import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
-import com.belvinard.gestiondestock.models.Article;
-import com.belvinard.gestiondestock.models.Category;
-import com.belvinard.gestiondestock.models.Entreprise;
-import com.belvinard.gestiondestock.repositories.ArticleRepository;
-import com.belvinard.gestiondestock.repositories.CategoryRepository;
-import com.belvinard.gestiondestock.repositories.EntepriseRepository;
+import com.belvinard.gestiondestock.models.*;
+import com.belvinard.gestiondestock.repositories.*;
 import com.belvinard.gestiondestock.services.ArticleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -24,13 +20,19 @@ public class ArticleServiceImpl implements ArticleService {
     private final EntepriseRepository entepriseRepository;
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
+    private final LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository;
+    private final LigneCommandeClientRepository ligneCommandeClientRepository;
+    private final LigneVenteRepository ligneVenteRepository;
 
     public ArticleServiceImpl(ArticleRepository articleRepository, EntepriseRepository entepriseRepository,
-                              CategoryRepository categoryRepository, ModelMapper modelMapper) {
+                              CategoryRepository categoryRepository, ModelMapper modelMapper, LigneVenteRepository venteRepository, LigneCommandeFournisseurRepository commandeFournisseurRepository, LigneCommandeClientRepository commandeClientRepository, LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository, LigneCommandeClientRepository ligneCommandeClientRepository, LigneVenteRepository ligneVenteRepository) {
         this.articleRepository = articleRepository;
         this.entepriseRepository = entepriseRepository;
         this.categoryRepository = categoryRepository;
         this.modelMapper = modelMapper;
+        this.ligneCommandeFournisseurRepository = ligneCommandeFournisseurRepository;
+        this.ligneCommandeClientRepository = ligneCommandeClientRepository;
+        this.ligneVenteRepository = ligneVenteRepository;
     }
 
    /* ================== CREATE ARTICLE ================== */
@@ -91,33 +93,9 @@ public class ArticleServiceImpl implements ArticleService {
         }).collect(Collectors.toList());
     }
 
-    /* ================== DELETE ARTICLE ================== */
-
-    @Override
-    public ArticleDTO deleteArticle(Long id) {
-        Article article = articleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Article", "id", id));
-
-        ArticleDTO dto = modelMapper.map(article, ArticleDTO.class);
-
-        if (article.getEntreprise() != null) {
-            dto.setEntrepriseId(article.getEntreprise().getId());
-        }
-
-        if (article.getCategory() != null) {
-            dto.setCategoryId(article.getCategory().getId());
-            dto.setCategoryDetails(modelMapper.map(article.getCategory(), CategoryDTO.class));
-        }
-
-        articleRepository.delete(article);
-
-        return dto;
-    }
-
-
     /* ================== FIND ARTICLE BY ID ================== */
     @Override
-    public ArticleDTO findById(Long id) {
+    public ArticleDTO findAllByArticleId(Long id) {
         Article article = articleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Article", "id", id));
 
@@ -132,6 +110,92 @@ public class ArticleServiceImpl implements ArticleService {
 
         return dto;
     }
+
+    /* ================== DELETE ARTICLE ================== */
+
+//    @Override
+//    public ArticleDTO deleteArticle(Long id) {
+//        Article article = articleRepository.findById(id)
+//                .orElseThrow(() -> new ResourceNotFoundException("Article", "id", id));
+//
+//        ArticleDTO dto = modelMapper.map(article, ArticleDTO.class);
+//
+//        if (article.getEntreprise() != null) {
+//            dto.setEntrepriseId(article.getEntreprise().getId());
+//        }
+//
+//        if (article.getCategory() != null) {
+//            dto.setCategoryId(article.getCategory().getId());
+//            dto.setCategoryDetails(modelMapper.map(article.getCategory(), CategoryDTO.class));
+//        }
+//
+//        articleRepository.delete(article);
+//
+//        List<LigneCommandeClient> ligneCommandeClients = ligneCommandeClientRepository.findAllByArticleId(id);
+//        if (!ligneCommandeClients.isEmpty()) {
+//            throw new APIException("Impossible de supprimer un article deja utilise dans des commandes client");
+//        }
+//        List<LigneCommandeFournisseur> ligneCommandeFournisseurs = ligneCommandeFournisseurRepository.findAllByArticleId(id);
+//        if (!ligneCommandeFournisseurs.isEmpty()) {
+//            throw new APIException("Impossible de supprimer un article deja utilise dans des commandes fournisseur");
+//        }
+//        List<LigneVente> ligneVentes = ligneVenteRepository.findAllByArticleId(id);
+//        if (!ligneVentes.isEmpty()) {
+//            throw new APIException("Impossible de supprimer un article deja utilise dans des ventes");
+//        }
+//
+//        return dto;
+//    }
+
+    @Override
+    public ArticleDTO deleteArticle(Long id) {
+        // Recherche de l'article
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Article", "id", id));
+
+        // Vérifie s'il est utilisé ailleurs avant suppression
+        checkIfArticleUsedElseThrow(id);
+
+        // Préparation du DTO de réponse
+        ArticleDTO dto = modelMapper.map(article, ArticleDTO.class);
+
+        if (article.getEntreprise() != null) {
+            dto.setEntrepriseId(article.getEntreprise().getId());
+        }
+
+        if (article.getCategory() != null) {
+            dto.setCategoryId(article.getCategory().getId());
+            dto.setCategoryDetails(modelMapper.map(article.getCategory(), CategoryDTO.class));
+        }
+
+        // Suppression réelle de l'article
+        articleRepository.delete(article);
+
+        return dto;
+    }
+
+
+    /**
+     * Vérifie si l'article est utilisé dans des lignes de commande ou de vente,
+     * et lève une exception si c'est le cas.
+     */
+    private void checkIfArticleUsedElseThrow(Long idArticle) {
+        List<LigneCommandeClient> ligneCommandeClients = ligneCommandeClientRepository.findAllByArticleId(idArticle);
+        if (!ligneCommandeClients.isEmpty()) {
+            throw new APIException("Impossible de supprimer un article déjà utilisé dans des commandes client");
+        }
+
+        List<LigneCommandeFournisseur> ligneCommandeFournisseurs = ligneCommandeFournisseurRepository.findAllByArticleId(idArticle);
+        if (!ligneCommandeFournisseurs.isEmpty()) {
+            throw new APIException("Impossible de supprimer un article déjà utilisé dans des commandes fournisseur");
+        }
+
+        List<LigneVente> ligneVentes = ligneVenteRepository.findAllByArticleId(idArticle);
+        if (!ligneVentes.isEmpty()) {
+            throw new APIException("Impossible de supprimer un article déjà utilisé dans des ventes");
+        }
+    }
+
 
     /* ================== FIND ARTICLE BY CODE ================== */
 
@@ -177,6 +241,46 @@ public class ArticleServiceImpl implements ArticleService {
         }).collect(Collectors.toList());
     }
 
+    @Override
+    public List<LigneVenteDTO> findHistoriqueVentes(Long idArticle) {
+
+        // Vérifie si l'article existe
+        Article article = articleRepository.findById(idArticle)
+                .orElseThrow(() -> new ResourceNotFoundException("Article", "id", idArticle));
+
+        // Récupère toutes les lignes de vente associées à l'article
+        List<LigneVente> lignesVente = ligneVenteRepository.findAllByArticleId(idArticle);
+
+        //Mappe les entités LigneVente vers des DTOs LigneVenteDTO
+        return lignesVente.stream()
+                .map(ligneVente -> modelMapper.map(ligneVente, LigneVenteDTO.class))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<LigneCommandeClientDTO> findHistoriaueCommandeClient(Long idArticle) {
+        Article article = articleRepository.findById(idArticle)
+                .orElseThrow(() -> new ResourceNotFoundException("Article", "id", idArticle));
+
+        List<LigneCommandeClient> lignes = ligneCommandeClientRepository.findAllByArticleId(idArticle);
+
+        return lignes.stream()
+                .map(ligne -> modelMapper.map(ligne, LigneCommandeClientDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LigneCommandeFournisseurDTO> findHistoriqueCommandeFournisseur(Long idArticle) {
+        Article article = articleRepository.findById(idArticle)
+                .orElseThrow(() -> new ResourceNotFoundException("Article", "id", idArticle));
+
+        List<LigneCommandeFournisseur> lignes = ligneCommandeFournisseurRepository.findAllByArticleId(idArticle);
+
+        return lignes.stream()
+                .map(ligne -> modelMapper.map(ligne, LigneCommandeFournisseurDTO.class))
+                .collect(Collectors.toList());
+    }
 
 
 }

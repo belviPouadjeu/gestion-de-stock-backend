@@ -1,6 +1,10 @@
 package com.belvinard.gestiondestock.controllers;
 
 import com.belvinard.gestiondestock.dtos.ArticleDTO;
+import com.belvinard.gestiondestock.dtos.LigneCommandeClientDTO;
+import com.belvinard.gestiondestock.dtos.LigneCommandeFournisseurDTO;
+import com.belvinard.gestiondestock.dtos.LigneVenteDTO;
+import com.belvinard.gestiondestock.exceptions.APIException;
 import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
 import com.belvinard.gestiondestock.responses.MyErrorResponses;
 import com.belvinard.gestiondestock.services.ArticleService;
@@ -65,7 +69,7 @@ public class ArticleController {
     public ResponseEntity<ArticleDTO> getArticleById(
             @Parameter(description = "ID de l'article à récupérer", required = true)
             @PathVariable Long id) {
-        ArticleDTO articleDTO = articleService.findById(id);
+        ArticleDTO articleDTO = articleService.findAllByArticleId(id);
         return ResponseEntity.ok(articleDTO);
     }
 
@@ -105,6 +109,28 @@ public class ArticleController {
         return ResponseEntity.ok(articles);
     }
 
+    @Operation(summary = "Historique des ventes pour un article",
+            description = "Retourne toutes les ventes liées à un article donné")
+    @GetMapping("/articles/{idArticle}/vente")
+    public ResponseEntity<List<LigneVenteDTO>> getHistoriqueVente(@PathVariable Long idArticle) {
+        return ResponseEntity.ok(articleService.findHistoriqueVentes(idArticle));
+    }
+
+    @Operation(summary = "Historique des commandes clients",
+            description = "Retourne toutes les commandes client contenant l'article")
+    @GetMapping("/articles/{idArticle}/commande-client")
+    public ResponseEntity<List<LigneCommandeClientDTO>> getHistoriqueCommandeClient(@PathVariable Long idArticle) {
+        return ResponseEntity.ok(articleService.findHistoriaueCommandeClient(idArticle));
+    }
+
+    @Operation(summary = "Historique des commandes fournisseurs",
+            description = "Retourne toutes les commandes fournisseur contenant l'article")
+    @GetMapping("/articles/{idArticle}/commande-fournisseur")
+    public ResponseEntity<List<LigneCommandeFournisseurDTO>> getHistoriqueCommandeFournisseur(@PathVariable Long idArticle) {
+        return ResponseEntity.ok(articleService.findHistoriqueCommandeFournisseur(idArticle));
+    }
+
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<MyErrorResponses> handleResourceNotFoundException(ResourceNotFoundException ex) {
         MyErrorResponses errorResponse = new MyErrorResponses("NOT_FOUND", ex.getMessage());
@@ -119,6 +145,13 @@ public class ArticleController {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(APIException.class)
+    public ResponseEntity<MyErrorResponses> myAPIException(APIException ex) {
+        MyErrorResponses errorResponse = new MyErrorResponses("BAD_REQUEST", ex.getMessage());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 
