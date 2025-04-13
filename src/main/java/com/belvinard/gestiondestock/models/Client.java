@@ -55,7 +55,7 @@ public class Client extends AbstractEntity {
   private String numTel;
 
   @ManyToOne
-  @JoinColumn(name = "entrepriseiId")
+  @JoinColumn(name = "entrepriseId")
   private Entreprise entreprise;
 
   @OneToMany(mappedBy = "client")

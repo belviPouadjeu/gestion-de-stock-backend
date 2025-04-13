@@ -50,7 +50,7 @@ public class ClientDTO {
 
     private Long entrepriseId;
 
-    @JsonIgnore
+    //@JsonIgnore
     private List<CommandeClientDTO> commandeClients;
 
 }

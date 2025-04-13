@@ -1,5 +1,6 @@
 package com.belvinard.gestiondestock.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Embeddable
 public class Adresse implements Serializable {
 
@@ -29,7 +31,7 @@ public class Adresse implements Serializable {
   private String ville;
 
   @NotBlank(message = "Le code postal est obligatoire")
-  @Size(min = 4, max = 10, message = "Le code postal doit contenir entre 4 et 10 caractères")
+  @Size(min = 3, max = 10, message = "Le code postal doit contenir entre 4 et 10 caractères")
   private String codePostale;
 
   @NotBlank(message = "Le pays est obligatoire")
