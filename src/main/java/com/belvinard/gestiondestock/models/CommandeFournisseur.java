@@ -40,6 +40,7 @@ public class CommandeFournisseur extends AbstractEntity {
   @NotNull(message = "L'ID de l'entreprise est obligatoire")
   private Long entrepriseId;
 
+  @OneToMany(mappedBy = "commandeFournisseur", cascade = CascadeType.ALL, orphanRemoval = true)
   @NotNull(message = "La liste des lignes de commande est obligatoire")
   @Size(min = 1, message = "Il doit y avoir au moins une ligne de commande")
   private List<LigneCommandeFournisseur> ligneCommandeFournisseurs;
