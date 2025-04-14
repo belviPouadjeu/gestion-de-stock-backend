@@ -9,27 +9,20 @@ import java.util.List;
 
 public interface CommandeClientService {
 
-  CommandeClientDTO createCommandeClient(CommandeClientDTO commandeClientDTO);
+  CommandeClientDTO createCommandeClient(Long clientId, Long entrepriseId, CommandeClientDTO commandeClientDTO);
 
   CommandeClientDTO updateEtatCommande(Long idCommande, EtatCommande etatCommande);
 
-  CommandeClientDTO updateQuantiteCommande(Long idCommande, Long idLigneCommande, BigDecimal quantite);
-
-  CommandeClientDTO updateClient(Long idCommande, Long idClient);
-
-  CommandeClientDTO updateArticle(Long idCommande, Long idLigneCommande, Long newIdArticle);
-
-  // Delete article ==> delete LigneCommandeClient
-  CommandeClientDTO deleteArticle(Long idCommande, Long idLigneCommande);
+  List<CommandeClientDTO> findAll();
 
   CommandeClientDTO findById(Long id);
 
-  CommandeClientDTO findByCode(String code);
-
-  List<CommandeClientDTO> getAllCommandeClients();
-
   List<LigneCommandeClientDTO> findAllLignesCommandesClientByCommandeClientId(Long idCommande);
 
-  CommandeClientDTO delete(Long id);
+  //CommandeClientDTO delete(Long id);
+
+  CommandeClientDTO deleteCommandeClient(Long id);
+
+  CommandeClientDTO findByCode(String code);
 
 }

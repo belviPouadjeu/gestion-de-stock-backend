@@ -16,26 +16,55 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommandeClientDTO {
-
+    @Schema(hidden = true)
     private Long id;
 
+    /**
+     * Code unique représentant la commande.
+     */
     @NotBlank(message = "Le code de la commande est obligatoire")
     @Size(min = 4, max = 50, message = "Le code de la commande doit contenir entre 4 et 50 caractères")
     private String code;
 
+    /**
+     * Date à laquelle la commande a été passée.
+     */
     @NotNull(message = "La date de commande est obligatoire")
     private LocalDateTime dateCommande;
 
+    /**
+     * État actuel de la commande (EN_PREPARATION, LIVREE, ANNULÉE...).
+     */
     @NotNull(message = "L'état de la commande est obligatoire")
     private EtatCommande etatCommande;
 
+    /**
+     * ID du client ayant passé la commande.
+     */
+    //@NotNull(message = "L'identifiant du client est requis")
+    @Schema(hidden = true)
+    private Long clientId;
+
+    /**
+     * ID de l'entreprise à laquelle est rattachée la commande.
+     */
+    //@NotNull(message = "L'identifiant de l'entreprise est requis")
+    @Schema(hidden = true)
+    private Long entrepriseId;
+
+    /**
+     * Informations détaillées du client (rempli uniquement pour la consultation).
+     */
     @Schema(hidden = true)
     private ClientDTO clientDetails;
 
-    @NotNull(message = "L'identifiant de l'entreprise est requis")
-    private Long entrepriseId;
+    @Schema(hidden = true)
+    private EntrepriseDTO entrepriseDetails;
 
+
+    /**
+     * Liste des lignes de commande associées (affichée uniquement lors de la consultation).
+     */
     @Schema(hidden = true)
     private List<LigneCommandeClientDTO> ligneCommandeClients;
 }
-
