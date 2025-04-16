@@ -9,18 +9,7 @@ import java.util.List;
 
 public interface CommandeFournisseurService {
 
-  CommandeFournisseurDTO createCmdFournisseur(CommandeFournisseurDTO commandeFournisseurDTO);
-
-  CommandeFournisseurDTO updateEtatCommande(Long idCommande, EtatCommande etatCommande);
-
-  CommandeFournisseurDTO updateQuantiteCommande(Long idCommande, Long idLigneCommande, BigDecimal quantite);
-
-  CommandeFournisseurDTO updateFournisseur(Long idCommande, Long idFournisseur);
-
-  CommandeFournisseurDTO updateArticle(Long idCommande, Long idLigneCommande, Long idArticle);
-
-  // Delete article ==> delete LigneCommandeFournisseur
-  CommandeFournisseurDTO deleteArticle(Long idCommande, Long idLigneCommande);
+  CommandeFournisseurDTO create(CommandeFournisseurDTO commandeFournisseurDTO);
 
   CommandeFournisseurDTO findById(Long id);
 
@@ -28,8 +17,7 @@ public interface CommandeFournisseurService {
 
   List<CommandeFournisseurDTO> findAll();
 
-  List<LigneCommandeFournisseurDTO> findAllLignesCommandesFournisseurByCommandeFournisseurId(Long idCommande);
+  List<LigneCommandeFournisseurDTO> findAllLignesByCommandeId(Long idCommande);
 
   CommandeFournisseurDTO delete(Long id);
-
 }

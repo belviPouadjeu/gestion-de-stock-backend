@@ -48,6 +48,22 @@ public class AppConfig {
             m.map(src -> src.getCategory(), ArticleDTO::setCategoryDetails);
         });
 
+
+        // Fournisseur → DTO
+        TypeMap<Fournisseur, FournisseurDTO> fournisseurToDto = mapper.createTypeMap(Fournisseur.class, FournisseurDTO.class);
+        fournisseurToDto.addMappings(m -> {
+            m.map(Fournisseur::getAdresse, FournisseurDTO::setAdresse);
+            m.map(f -> f.getEntreprise().getId(), FournisseurDTO::setEntrepriseId);
+            m.map(Fournisseur::getEntreprise, FournisseurDTO::setEntrepriseDetails);
+        });
+
+        // FournisseurDTO → Entité
+        TypeMap<FournisseurDTO, Fournisseur> dtoToFournisseur = mapper.createTypeMap(FournisseurDTO.class, Fournisseur.class);
+        dtoToFournisseur.addMappings(m -> {
+            m.map(FournisseurDTO::getAdresse, Fournisseur::setAdresse);
+        });
+
+
         return mapper;
     }
 

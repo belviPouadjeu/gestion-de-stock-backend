@@ -6,12 +6,11 @@ import java.util.List;
 
 public interface FournisseurService {
 
-  FournisseurDTO createFournisseur(FournisseurDTO fournisseurDTO);
+  FournisseurDTO createFournisseur(Long entrepriseId, FournisseurDTO fournisseurDTO);
 
   FournisseurDTO findById(Long id);
 
   List<FournisseurDTO> findAll();
 
   FournisseurDTO delete(Long id);
-
 }
