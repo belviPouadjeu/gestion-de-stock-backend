@@ -2,6 +2,7 @@ package com.belvinard.gestiondestock.controllers;
 
 import com.belvinard.gestiondestock.dtos.FournisseurDTO;
 import com.belvinard.gestiondestock.exceptions.APIException;
+import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
 import com.belvinard.gestiondestock.responses.MyErrorResponses;
 import com.belvinard.gestiondestock.services.FournisseurService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -124,5 +125,13 @@ public class FournisseurController {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<MyErrorResponses> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        MyErrorResponses errorResponse = new MyErrorResponses("NOT_FOUND", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+
 
 }

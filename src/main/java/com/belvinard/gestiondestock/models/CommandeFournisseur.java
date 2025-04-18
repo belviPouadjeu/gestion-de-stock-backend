@@ -1,18 +1,12 @@
 package com.belvinard.gestiondestock.models;
 
-import com.belvinard.gestiondestock.dtos.FournisseurDTO;
-import com.belvinard.gestiondestock.dtos.LigneCommandeFournisseurDTO;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -22,27 +16,57 @@ import java.util.List;
 @Table(name = "commandefournisseur")
 public class CommandeFournisseur extends AbstractEntity {
 
-  @NotBlank(message = "Le code de la commande est obligatoire")
-  @Size(min = 4, max = 20, message = "Le code doit contenir entre 4 et 20 caractères")
+  //@NotBlank(message = "Le code de la commande est obligatoire")
+  //@Size(min = 1, max = 50, message = "Le code de la commande doit avoir entre 1 et 50 caractères")
+  @Column(name = "code")
   private String code;
 
-  @NotNull(message = "La date de commande est obligatoire")
+  // Optionnel de valider si la date est auto-générée
+  @Column(name = "datecommande")
   private LocalDateTime dateCommande;
 
-  @NotNull(message = "L'état de la commande est obligatoire")
+  //@NotNull(message = "L'état de la commande est obligatoire")
+  @Column(name = "etatcommande")
+  @Enumerated(EnumType.STRING)
   private EtatCommande etatCommande;
 
-  @NotNull(message = "Le fournisseur est obligatoire")
+  //@NotNull(message = "Le fournisseur est obligatoire")
   @ManyToOne
   @JoinColumn(name = "fournisseur_id")
   private Fournisseur fournisseur;
 
-  @NotNull(message = "L'ID de l'entreprise est obligatoire")
-  private Long entrepriseId;
+  // Getters & Setters
 
-  @OneToMany(mappedBy = "commandeFournisseur", cascade = CascadeType.ALL, orphanRemoval = true)
-  @NotNull(message = "La liste des lignes de commande est obligatoire")
-  @Size(min = 1, message = "Il doit y avoir au moins une ligne de commande")
-  private List<LigneCommandeFournisseur> ligneCommandeFournisseurs;
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  public LocalDateTime getDateCommande() {
+    return dateCommande;
+  }
+
+  public void setDateCommande(LocalDateTime dateCommande) {
+    this.dateCommande = dateCommande;
+  }
+
+  public EtatCommande getEtatCommande() {
+    return etatCommande;
+  }
+
+  public void setEtatCommande(EtatCommande etatCommande) {
+    this.etatCommande = etatCommande;
+  }
+
+  public Fournisseur getFournisseur() {
+    return fournisseur;
+  }
+
+  public void setFournisseur(Fournisseur fournisseur) {
+    this.fournisseur = fournisseur;
+  }
 
 }

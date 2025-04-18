@@ -1,5 +1,6 @@
 package com.belvinard.gestiondestock.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -9,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -46,6 +49,12 @@ public class Entreprise extends AbstractEntity {
 
   @Size(max = 150, message = "Le site web doit contenir au maximum 150 caractères")
   private String steWeb;
+
+  @Schema(hidden = true)
+  private LocalDateTime creationDate;
+
+  @Schema(hidden = true)
+  private LocalDateTime lastModifiedDate;
 
 
 }

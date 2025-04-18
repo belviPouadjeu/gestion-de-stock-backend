@@ -1,5 +1,6 @@
 package com.belvinard.gestiondestock.services.impl;
 
+import com.belvinard.gestiondestock.dtos.EntrepriseDTO;
 import com.belvinard.gestiondestock.dtos.FournisseurDTO;
 import com.belvinard.gestiondestock.exceptions.APIException;
 import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
@@ -34,15 +35,27 @@ public class FournisseurServiceImpl implements FournisseurService {
     // ✅ Création d'un fournisseur
     @Override
     public FournisseurDTO createFournisseur(Long entrepriseId, FournisseurDTO fournisseurDTO) {
+        // 🔎 Récupérer l'entreprise
         Entreprise entreprise = entrepriseRepository.findById(entrepriseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Entreprise non trouvée avec l'id " + entrepriseId));
 
+        // 🔄 Mapper le DTO vers l'entité
         Fournisseur fournisseur = modelMapper.map(fournisseurDTO, Fournisseur.class);
+
+        // 🔗 Lier à l'entreprise
         fournisseur.setEntreprise(entreprise);
 
+        // 💾 Enregistrer le fournisseur
         Fournisseur saved = fournisseurRepository.save(fournisseur);
-        return modelMapper.map(saved, FournisseurDTO.class);
+
+        // 🔁 Remapper en DTO et ajouter entrepriseId + entrepriseDetails manuellement
+        FournisseurDTO savedDTO = modelMapper.map(saved, FournisseurDTO.class);
+        savedDTO.setEntrepriseId(entreprise.getId());
+        savedDTO.setEntrepriseDetails(modelMapper.map(entreprise, EntrepriseDTO.class));
+
+        return savedDTO;
     }
+
 
 
     // ✅ Trouver un fournisseur par ID

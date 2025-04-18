@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface CommandeFournisseurRepository extends JpaRepository<CommandeFournisseur, Long> {
 
-  Optional<CommandeFournisseur> findCommandeFournisseurByCode(String code);
+    Optional<CommandeFournisseur> findByCode(String code);
 
-  List<CommandeFournisseur> findAllByFournisseurId(Long id);
+    List<CommandeFournisseur> findAllByFournisseurId(Long fournisseurId);
 }

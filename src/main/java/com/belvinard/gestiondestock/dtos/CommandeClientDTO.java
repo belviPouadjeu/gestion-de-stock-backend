@@ -1,6 +1,7 @@
 package com.belvinard.gestiondestock.dtos;
 
 import com.belvinard.gestiondestock.models.EtatCommande;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -42,6 +43,7 @@ public class CommandeClientDTO {
      * ID du client ayant passé la commande.
      */
     //@NotNull(message = "L'identifiant du client est requis")
+    @JsonIgnore
     @Schema(hidden = true)
     private Long clientId;
 
@@ -49,6 +51,7 @@ public class CommandeClientDTO {
      * ID de l'entreprise à laquelle est rattachée la commande.
      */
     //@NotNull(message = "L'identifiant de l'entreprise est requis")
+    @JsonIgnore
     @Schema(hidden = true)
     private Long entrepriseId;
 

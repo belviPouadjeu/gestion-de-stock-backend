@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,6 +44,12 @@ public class EntrepriseDTO {
 
     @Size(max = 150, message = "Le site web doit contenir au maximum 150 caractères")
     private String steWeb;
+
+    @Schema(hidden = true)
+    private LocalDateTime creationDate;
+
+    @Schema(hidden = true)
+    private LocalDateTime lastModifiedDate;
 
 
 }

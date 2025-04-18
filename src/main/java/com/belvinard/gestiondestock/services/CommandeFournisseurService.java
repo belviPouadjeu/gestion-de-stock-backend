@@ -1,23 +1,31 @@
 package com.belvinard.gestiondestock.services;
 
 import com.belvinard.gestiondestock.dtos.CommandeFournisseurDTO;
-import com.belvinard.gestiondestock.dtos.LigneCommandeFournisseurDTO;
 import com.belvinard.gestiondestock.models.EtatCommande;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface CommandeFournisseurService {
 
-  CommandeFournisseurDTO create(CommandeFournisseurDTO commandeFournisseurDTO);
+    // 🔹 Créer une nouvelle commande fournisseur
+    CommandeFournisseurDTO save(CommandeFournisseurDTO dto, Long fournisseurId);
 
-  CommandeFournisseurDTO findById(Long id);
+    // 🔹 Trouver une commande par ID
+    CommandeFournisseurDTO findById(Long id);
 
-  CommandeFournisseurDTO findByCode(String code);
+    // 🔹 Trouver une commande par code
+    CommandeFournisseurDTO findByCode(String code);
 
-  List<CommandeFournisseurDTO> findAll();
+    // 🔹 Obtenir toutes les commandes
+    List<CommandeFournisseurDTO> findAll();
 
-  List<LigneCommandeFournisseurDTO> findAllLignesByCommandeId(Long idCommande);
+    // 🔹 Supprimer une commande fournisseur par son ID
+    void deleteById(Long id);
 
-  CommandeFournisseurDTO delete(Long id);
+    // 🔹 Mettre à jour l'état de la commande (ex: EN_COURS → LIVREE)
+    CommandeFournisseurDTO updateEtatCommande(Long idCommande, EtatCommande nouvelEtat);
+
+
+    // 🔹 Obtenir toutes les commandes liées à un fournisseur donné
+    List<CommandeFournisseurDTO> findAllByFournisseurId(Long fournisseurId);
 }

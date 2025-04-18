@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FournisseurDTO {
+    @Schema(hidden = true)
     private Long id;
 
     @NotBlank(message = "Le nom du client est obligatoire")

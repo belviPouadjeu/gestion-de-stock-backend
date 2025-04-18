@@ -28,8 +28,8 @@ public class CategoryDTO {
     @Schema(hidden = true)
     private Long entrepriseId;
 
-    @Schema(hidden = true)
-    private Long articleId;
+//    @Schema(hidden = true)
+//    private Long articleId;
 
     @Schema(hidden = true)
     private LocalDateTime creationDate;
