@@ -21,9 +21,9 @@ public class CommandeFournisseur extends AbstractEntity {
   @Column(name = "code")
   private String code;
 
-  // Optionnel de valider si la date est auto-générée
-  @Column(name = "datecommande")
-  private LocalDateTime dateCommande;
+//  // Optionnel de valider si la date est auto-générée
+//  @Column(name = "datecommande")
+//  private LocalDateTime dateCommande;
 
   //@NotNull(message = "L'état de la commande est obligatoire")
   @Column(name = "etatcommande")
@@ -45,13 +45,13 @@ public class CommandeFournisseur extends AbstractEntity {
     this.code = code;
   }
 
-  public LocalDateTime getDateCommande() {
-    return dateCommande;
-  }
-
-  public void setDateCommande(LocalDateTime dateCommande) {
-    this.dateCommande = dateCommande;
-  }
+//  public LocalDateTime getDateCommande() {
+//    return dateCommande;
+//  }
+//
+//  public void setDateCommande(LocalDateTime dateCommande) {
+//    this.dateCommande = dateCommande;
+//  }
 
   public EtatCommande getEtatCommande() {
     return etatCommande;

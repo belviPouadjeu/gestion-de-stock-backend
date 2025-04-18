@@ -67,6 +67,15 @@ public class AppConfig {
             m.map(FournisseurDTO::getAdresse, Fournisseur::setAdresse);
         });
 
+        // ✅ CommandeFournisseur → DTO
+        TypeMap<CommandeFournisseur, CommandeFournisseurDTO> commandeFournisseurMap = mapper.createTypeMap(CommandeFournisseur.class,
+                CommandeFournisseurDTO.class);
+        commandeFournisseurMap.addMappings(m -> {
+            m.map(src -> src.getFournisseur().getId(), CommandeFournisseurDTO::setFournisseurId);
+            m.map(CommandeFournisseur::getFournisseur, CommandeFournisseurDTO::setFournisseurDetails);
+        });
+
+
         return mapper;
     }
 

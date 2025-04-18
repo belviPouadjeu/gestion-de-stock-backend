@@ -25,27 +25,35 @@ public class CommandeFournisseurDTO {
     @Size(min = 1, max = 50, message = "Le code de la commande doit avoir entre 1 et 50 caractères")
     private String code;
 
-    private LocalDateTime dateCommande;
+    //private LocalDateTime dateCommande;
 
     @NotNull(message = "L'état de la commande est obligatoire")
     private EtatCommande etatCommande;
+
+    @Schema(hidden = true)
+    private LocalDateTime creationDate;
+
+    @Schema(hidden = true)
+    private LocalDateTime lastModifiedDate;
+    @Schema(hidden = true)
+    private Long fournisseurId;
 
     // Ce champ est automatiquement rempli côté backend
     @Schema(hidden = true)
     private FournisseurDTO fournisseurDetails;
 
-    @Override
-    public String toString() {
-        return "CommandeFournisseurDTO{" +
-                "code='" + code + '\'' +
-                ", etatCommande=" + etatCommande +
-                '}';
-    }
-
-
-//    @Schema(hidden = true)
-//    private Long fournisseurId;
-
+//    @Override
+//    public String toString() {
+//        return "CommandeFournisseurDTO{" +
+//                "id=" + id +
+//                ", code='" + code + '\'' +
+//                ", etatCommande=" + etatCommande +
+//                ", creationDate=" + creationDate +
+//                ", lastModifiedDate=" + lastModifiedDate +
+//                ", fournisseurId=" + fournisseurId +
+//                ", fournisseurDetails=" + fournisseurDetails +
+//                '}';
+//    }
 
     // Getters & Setters
     public Long getId() {
@@ -64,13 +72,13 @@ public class CommandeFournisseurDTO {
         this.code = code;
     }
 
-    public LocalDateTime getDateCommande() {
-        return dateCommande;
-    }
+//    public LocalDateTime getDateCommande() {
+//        return dateCommande;
+//    }
 
-    public void setDateCommande(LocalDateTime dateCommande) {
-        this.dateCommande = dateCommande;
-    }
+//    public void setDateCommande(LocalDateTime dateCommande) {
+//        this.dateCommande = dateCommande;
+//    }
 
     public EtatCommande getEtatCommande() {
         return etatCommande;
