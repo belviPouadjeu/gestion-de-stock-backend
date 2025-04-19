@@ -51,4 +51,7 @@ public class Article extends AbstractEntity {
   @ManyToOne
   @JoinColumn(name = "commande_id")
   private CommandeFournisseur commandeFournisseur;
+
+  @OneToMany(mappedBy = "article")
+  private List<LigneCommandeFournisseur> ligneCommandeFournisseurs;
 }

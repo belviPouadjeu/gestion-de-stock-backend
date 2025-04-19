@@ -1,6 +1,7 @@
 package com.belvinard.gestiondestock.services.impl;
 
 import com.belvinard.gestiondestock.dtos.CommandeFournisseurDTO;
+import com.belvinard.gestiondestock.exceptions.APIException;
 import com.belvinard.gestiondestock.exceptions.InvalidEntityException;
 import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
 import com.belvinard.gestiondestock.models.CommandeFournisseur;
@@ -12,6 +13,7 @@ import com.belvinard.gestiondestock.repositories.EntrepriseRepository;
 import com.belvinard.gestiondestock.repositories.FournisseurRepository;
 import com.belvinard.gestiondestock.services.CommandeFournisseurService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -39,10 +41,17 @@ public class CommandeFournisseurServiceImpl implements CommandeFournisseurServic
     }
 
     @Override
+    @Transactional
     public CommandeFournisseurDTO save(CommandeFournisseurDTO dto, Long fournisseurId) {
         // Vérification des paramètres
-        if (dto == null) {
-            throw new InvalidEntityException("Commande fournisseur invalide");
+        if (dto == null || dto.getCode() == null || dto.getCode().isBlank()) {
+            throw new InvalidEntityException("Commande fournisseur invalide : le code est requis");
+        }
+
+        // Vérification de l'unicité du code
+        boolean codeExists = commandeFournisseurRepository.existsByCode(dto.getCode());
+        if (codeExists) {
+            throw new APIException("Une commande fournisseur existe déjà avec le code : " + dto.getCode());
         }
 
         // Récupération du fournisseur par son ID
@@ -52,7 +61,6 @@ public class CommandeFournisseurServiceImpl implements CommandeFournisseurServic
         // Création de l'entité CommandeFournisseur à partir du DTO
         CommandeFournisseur commande = modelMapper.map(dto, CommandeFournisseur.class);
         commande.setFournisseur(fournisseur);
-        //commande.setEntreprise(entreprise);
 
         // Sauvegarde de la commande fournisseur dans la base de données
         CommandeFournisseur saved = commandeFournisseurRepository.save(commande);
@@ -84,8 +92,15 @@ public class CommandeFournisseurServiceImpl implements CommandeFournisseurServic
 
     @Override
     public List<CommandeFournisseurDTO> findAll() {
-        return List.of();
+        // Récupérer toutes les commandes
+        List<CommandeFournisseur> commandes = commandeFournisseurRepository.findAll();
+
+        // Convertir la liste des commandes en une liste de DTO
+        return commandes.stream()
+                .map(commande -> modelMapper.map(commande, CommandeFournisseurDTO.class))
+                .collect(Collectors.toList());
     }
+
 
     @Override
     public void deleteById(Long id) {
@@ -113,17 +128,19 @@ public class CommandeFournisseurServiceImpl implements CommandeFournisseurServic
         return modelMapper.map(updatedCommande, CommandeFournisseurDTO.class);
     }
 
-
     @Override
     public List<CommandeFournisseurDTO> findAllByFournisseurId(Long fournisseurId) {
-        // Trouver toutes les commandes pour un fournisseur donné
+        if (!fournisseurRepository.existsById(fournisseurId)) {
+            throw new ResourceNotFoundException("Fournisseur non trouvé avec l'ID: " + fournisseurId);
+        }
+
         List<CommandeFournisseur> commandes = commandeFournisseurRepository.findAllByFournisseurId(fournisseurId);
 
-        // Convertir les entités en DTO
         return commandes.stream()
                 .map(commande -> modelMapper.map(commande, CommandeFournisseurDTO.class))
                 .collect(Collectors.toList());
     }
+
 
 
 

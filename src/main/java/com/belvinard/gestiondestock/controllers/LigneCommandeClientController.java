@@ -12,16 +12,20 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/ligne-commande-clients")
 @RequiredArgsConstructor
 public class LigneCommandeClientController {
 
-    private final LigneCommandeClientService service;
+    private final LigneCommandeClientService ligneCommandeClientService;
 
     /**
      * Crée une ligne de commande client associée à une commande et un article.
@@ -31,14 +35,34 @@ public class LigneCommandeClientController {
      * @param dto Les données de la ligne à créer.
      * @return La ligne de commande créée.
      */
-    @PostMapping("/{commandeId}/{articleId}")
-    public ResponseEntity<LigneCommandeClientDTO> createLigne(
+    @PostMapping("/{commandeId}/articles/{articleId}/lignes")
+    public ResponseEntity<LigneCommandeClientDTO> createLigneCommandeClient(
             @PathVariable Long commandeId,
             @PathVariable Long articleId,
-            @RequestBody @Valid LigneCommandeClientDTO dto) {
+            @Valid @RequestBody LigneCommandeClientDTO ligneDTO) {
 
-        return ResponseEntity.ok(service.createLigneCommandeClient(commandeId, articleId, dto));
+        LigneCommandeClientDTO created = ligneCommandeClientService
+                .createLigneCommandeClient(commandeId, articleId, ligneDTO);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
+//    @PostMapping("/lignes-commandes")
+//    public ResponseEntity<LigneCommandeClientDTO> createLigneCommandeClient(
+//            @RequestParam Long commandeId,
+//            @RequestParam Long articleId,
+//            @RequestBody @Valid LigneCommandeClientDTO ligneDTO) {
+//
+//        LigneCommandeClientDTO created = ligneCommandeClientService.createLigneCommandeClient(commandeId, articleId, ligneDTO);
+//        return new ResponseEntity<>(created, HttpStatus.CREATED);
+//    }
+
+//    @PostMapping("/{commandeId}/{articleId}")
+//    public ResponseEntity<LigneCommandeClientDTO> createLigne(
+//            @PathVariable Long commandeId,
+//            @PathVariable Long articleId,
+//            @RequestBody @Valid LigneCommandeClientDTO dto) {
+//
+//        return ResponseEntity.ok(service.createLigneCommandeClient(commandeId, articleId, dto));
+//    }
 
     /**
      * Enregistre plusieurs lignes de commande pour une commande donnée.
@@ -52,7 +76,7 @@ public class LigneCommandeClientController {
             @PathVariable Long commandeId,
             @RequestBody @Valid List<LigneCommandeClientDTO> lignesDTO) {
 
-        return ResponseEntity.ok(service.saveAll(commandeId, lignesDTO));
+        return ResponseEntity.ok(ligneCommandeClientService.saveAll(commandeId, lignesDTO));
     }
 
     /**
@@ -67,7 +91,7 @@ public class LigneCommandeClientController {
     public ResponseEntity<LigneCommandeClientDTO> updateLigne(
             @PathVariable Long ligneId,
             @RequestBody @Valid LigneCommandeClientDTO ligneDTO) {
-        return ResponseEntity.ok(service.update(ligneId, ligneDTO));
+        return ResponseEntity.ok(ligneCommandeClientService.update(ligneId, ligneDTO));
     }
 
     /**
@@ -80,7 +104,7 @@ public class LigneCommandeClientController {
             @ApiResponse(responseCode = "404", description = "Ligne non trouvée")
     })
     public ResponseEntity<LigneCommandeClientDTO> deleteLigne(@PathVariable Long ligneId) {
-        return ResponseEntity.ok(service.delete(ligneId));
+        return ResponseEntity.ok(ligneCommandeClientService.delete(ligneId));
     }
 
     /**
@@ -93,7 +117,7 @@ public class LigneCommandeClientController {
             @ApiResponse(responseCode = "404", description = "Ligne non trouvée")
     })
     public ResponseEntity<LigneCommandeClientDTO> getById(@PathVariable Long ligneId) {
-        return ResponseEntity.ok(service.findById(ligneId));
+        return ResponseEntity.ok(ligneCommandeClientService.findById(ligneId));
     }
 
     /**
@@ -105,13 +129,30 @@ public class LigneCommandeClientController {
             @ApiResponse(responseCode = "200", description = "Liste des lignes récupérée")
     })
     public ResponseEntity<List<LigneCommandeClientDTO>> getAll() {
-        return ResponseEntity.ok(service.findAll());
+        return ResponseEntity.ok(ligneCommandeClientService.findAll());
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<MyErrorResponses> handleResourceNotFoundException(ResourceNotFoundException ex) {
         MyErrorResponses errorResponse = new MyErrorResponses("NOT_FOUND", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    // ✅ Handle validation errors
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<MyErrorResponses> handleValidationException(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            errors.put(error.getField(), error.getDefaultMessage());  // Collect field errors
+        }
+
+        MyErrorResponses errorResponse = new MyErrorResponses(
+                "BAD_REQUEST",
+                "Validation failed. Please correct the errors.",
+                errors
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 

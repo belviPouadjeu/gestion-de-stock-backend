@@ -11,4 +11,7 @@ public interface CommandeFournisseurRepository extends JpaRepository<CommandeFou
     Optional<CommandeFournisseur> findByCode(String code);
 
     List<CommandeFournisseur> findAllByFournisseurId(Long fournisseurId);
+
+    boolean existsByCode(String code);
+
 }

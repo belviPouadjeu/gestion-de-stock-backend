@@ -33,15 +33,27 @@ public class AppConfig {
         });
 
         // 🧾 LigneCommandeClient → DTO
-        TypeMap<LigneCommandeClient, LigneCommandeClientDTO> ligneMap = mapper.createTypeMap(LigneCommandeClient.class,
-                LigneCommandeClientDTO.class);
+        TypeMap<LigneCommandeClient, LigneCommandeClientDTO> ligneMap = mapper.createTypeMap(
+                LigneCommandeClient.class, LigneCommandeClientDTO.class);
+
         ligneMap.addMappings(m -> {
             m.map(src -> src.getArticle(), LigneCommandeClientDTO::setArticleDetails);
-            m.map(src -> src.getCommandeClient().getId(), LigneCommandeClientDTO::setCommandeClientId);
+            m.map(src -> src.getArticle().getId(), LigneCommandeClientDTO::setArticleId);
             m.map(src -> src.getCommandeClient(), LigneCommandeClientDTO::setCommandeClientDetails);
-            m.map(src -> src.getEntreprise().getId(), LigneCommandeClientDTO::setEntrepriseId);
-            m.map(src -> src.getEntreprise(), LigneCommandeClientDTO::setEntrepriseDetails);
+            m.map(src -> src.getCommandeClient().getId(), LigneCommandeClientDTO::setCommandeClientId);
         });
+
+
+//        TypeMap<LigneCommandeClient, LigneCommandeClientDTO> ligneMap = mapper.createTypeMap(LigneCommandeClient.class,
+//                LigneCommandeClientDTO.class);
+//        ligneMap.addMappings(m -> {
+//            m.map(src -> src.getArticle(), LigneCommandeClientDTO::setArticleDetails);
+//            m.map(src -> src.getCommandeClient().getId(), LigneCommandeClientDTO::setCommandeClientId);
+//            m.map(src -> src.getCommandeClient(), LigneCommandeClientDTO::setCommandeClientDetails);
+//
+//        });
+
+
 
         // 🎯 Article → DTO
         TypeMap<Article, ArticleDTO> articleMap = mapper.createTypeMap(Article.class, ArticleDTO.class);
@@ -75,6 +87,18 @@ public class AppConfig {
             m.map(CommandeFournisseur::getFournisseur, CommandeFournisseurDTO::setFournisseurDetails);
         });
 
+        // 📦 LigneCommandeFournisseur → DTO
+        TypeMap<LigneCommandeFournisseur, LigneCommandeFournisseurDTO> ligneCmdFournisseurMap =
+                mapper.createTypeMap(LigneCommandeFournisseur.class, LigneCommandeFournisseurDTO.class);
+
+        ligneCmdFournisseurMap.addMappings(m -> {
+            m.map(src -> src.getCommandeFournisseur().getId(), LigneCommandeFournisseurDTO::setCommandeFournisseurId);
+            m.map(LigneCommandeFournisseur::getCommandeFournisseur, LigneCommandeFournisseurDTO::setCommandeFournisseurDetails);
+            m.map(src -> src.getArticle().getId(), LigneCommandeFournisseurDTO::setArticleId);
+            m.map(LigneCommandeFournisseur::getArticle, LigneCommandeFournisseurDTO::setArticleDetails);
+        });
+
+
 
         return mapper;
     }
@@ -88,13 +112,3 @@ public class AppConfig {
     }
 }
 
-
-
-// 🧾 LigneCommandeFournisseur → DTO
-//        TypeMap<LigneCommandeFournisseur, LigneCommandeFournisseurDTO> ligneCommandeFournisseurMap = mapper.createTypeMap(LigneCommandeFournisseur.class, LigneCommandeFournisseurDTO.class);
-//        ligneCommandeFournisseurMap.addMappings(m -> {
-//            m.map(src -> src.getArticle(), LigneCommandeFournisseurDTO::setArticleDetails);
-//            m.map(src -> src.getCommandeFournisseur().getId(), LigneCommandeFournisseurDTO::setCommandeFournisseurId);
-//            m.map(src -> src.getEntreprise().getId(), LigneCommandeFournisseurDTO::setEntrepriseId);
-//            m.map(src -> src.getEntreprise(), LigneCommandeFournisseurDTO::setEntrepriseDetails);
-//        });

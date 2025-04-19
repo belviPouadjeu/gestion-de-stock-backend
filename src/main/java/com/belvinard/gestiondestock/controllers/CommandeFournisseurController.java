@@ -1,18 +1,23 @@
 package com.belvinard.gestiondestock.controllers;
 
 import com.belvinard.gestiondestock.dtos.CommandeFournisseurDTO;
+import com.belvinard.gestiondestock.exceptions.APIException;
+import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
 import com.belvinard.gestiondestock.models.EtatCommande;
 import com.belvinard.gestiondestock.responses.MyErrorResponses;
 import com.belvinard.gestiondestock.services.CommandeFournisseurService;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -114,6 +119,7 @@ public class CommandeFournisseurController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+
         commandeFournisseurService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
@@ -181,4 +187,38 @@ public class CommandeFournisseurController {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(APIException.class)
+    public ResponseEntity<MyErrorResponses> myAPIException(APIException ex) {
+        MyErrorResponses errorResponse = new MyErrorResponses("BAD_REQUEST", ex.getMessage());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<MyErrorResponses> handleEntityNotFoundException(EntityNotFoundException ex) {
+        MyErrorResponses errorResponse = new MyErrorResponses("NOT_FOUND", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<MyErrorResponses> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        MyErrorResponses response;
+
+        if (ex.getCause() instanceof InvalidFormatException invalidFormat) {
+            // Vérifie si l'erreur est liée à une énumération
+            String targetType = invalidFormat.getTargetType().getSimpleName();
+            String invalidValue = invalidFormat.getValue().toString();
+
+            String message = "Valeur invalide '" + invalidValue + "' pour le type " + targetType + ". "
+                    + "Vérifiez que vous utilisez une valeur correcte (ex. VALIDEE, LIVREE...).";
+
+            response = new MyErrorResponses("BAD_REQUEST", message);
+        } else {
+            response = new MyErrorResponses("BAD_REQUEST", "Requête mal formée. (ex. VALIDEE, LIVREE...)");
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }

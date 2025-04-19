@@ -3,6 +3,7 @@ package com.belvinard.gestiondestock.dtos;
 import com.belvinard.gestiondestock.models.EtatCommande;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,6 +22,7 @@ public class CommandeFournisseurDTO {
     @Schema(hidden = true)
     private Long id;
 
+    @Column(name = "code", unique = true, nullable = false)
     @NotBlank(message = "Le code de la commande est obligatoire")
     @Size(min = 1, max = 50, message = "Le code de la commande doit avoir entre 1 et 50 caractères")
     private String code;
@@ -35,6 +37,7 @@ public class CommandeFournisseurDTO {
 
     @Schema(hidden = true)
     private LocalDateTime lastModifiedDate;
+
     @Schema(hidden = true)
     private Long fournisseurId;
 

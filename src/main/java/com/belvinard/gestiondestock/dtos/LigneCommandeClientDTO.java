@@ -19,12 +19,7 @@ public class LigneCommandeClientDTO {
     @Schema(description = "Identifiant unique de la ligne de commande")
     private Long id;
 
-    @NotNull(message = "L'article est obligatoire")
-    @Schema(description = "Détails de l'article associé à la ligne", required = true)
-    private ArticleDTO articleDetails;
-
-    @NotNull(message = "L'identifiant de la commande client est obligatoire")
-    @Schema(description = "Identifiant de la commande client à laquelle appartient cette ligne", required = true, example = "1")
+    //@NotNull(message = "L'identifiant de la commande client est obligatoire")
     private Long commandeClientId;
 
     @JsonIgnore
@@ -41,13 +36,11 @@ public class LigneCommandeClientDTO {
     @Schema(description = "Prix unitaire de l'article", required = true, example = "10.50")
     private BigDecimal prixUnitaire;
 
-    @NotNull(message = "l'entreprise est obligatoire")
-    @Schema(description = "Détails de l'entreprise associée à la ligne", required = true)
-    private EntrepriseDTO entrepriseDetails;
+    //@NotNull(message = "L'identifiant de l'article est obligatoire")
+    private Long articleId;
 
+    @Schema(description = "Détails de l'article associé à la ligne", required = true, hidden = true)
+    private ArticleDTO articleDetails;
 
-    @NotNull(message = "L'identifiant de l'entreprise est obligatoire")
-    @Schema(description = "Identifiant de l'entreprise à laquelle appartient la commande", required = true, example = "1")
-    private Long entrepriseId;
-
+    // Getters & setters
 }

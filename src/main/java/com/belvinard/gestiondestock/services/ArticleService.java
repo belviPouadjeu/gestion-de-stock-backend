@@ -22,7 +22,7 @@ public interface ArticleService {
 
  List<LigneCommandeClientDTO> findHistoriaueCommandeClient(Long idArticle);
 
- //List<LigneCommandeFournisseurDTO> findHistoriqueCommandeFournisseur(Long idArticle);
+
 
 
 

@@ -18,16 +18,6 @@ import java.math.BigDecimal;
 @Table(name = "lignecommandeclient")
 public class LigneCommandeClient extends AbstractEntity {
 
-  @NotNull(message = "L'article est obligatoire")
-  @ManyToOne
-  @JoinColumn(name = "idarticle")
-  private Article article;
-
-  @NotNull(message = "La commande client est obligatoire")
-  @ManyToOne
-  @JoinColumn(name = "idcommandeclient")
-  private CommandeClient commandeClient;
-
   @NotNull(message = "La quantité est obligatoire")
   @DecimalMin(value = "0.01", message = "La quantité doit être supérieure à zéro")
   @Column(name = "quantite")
@@ -38,9 +28,14 @@ public class LigneCommandeClient extends AbstractEntity {
   @Column(name = "prixunitaire")
   private BigDecimal prixUnitaire;
 
-  @NotNull(message = "L'entreprise est obligatoire")
   @ManyToOne
-  @JoinColumn(name = "entrepriseiId")
-  private Entreprise entreprise;
+  @JoinColumn(name = "idcommandeclient")
+  private CommandeClient commandeClient;
+
+  @ManyToOne
+  @JoinColumn(name = "idarticle")
+  private Article article;
+
+
 }
 

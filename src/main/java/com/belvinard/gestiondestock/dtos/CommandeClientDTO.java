@@ -30,8 +30,11 @@ public class CommandeClientDTO {
     /**
      * Date à laquelle la commande a été passée.
      */
-    @NotNull(message = "La date de commande est obligatoire")
-    private LocalDateTime dateCommande;
+    @Schema(hidden = true)
+    private LocalDateTime creationDate;
+
+    @Schema(hidden = true)
+    private LocalDateTime lastModifiedDate;
 
     /**
      * État actuel de la commande (EN_PREPARATION, LIVREE, ANNULÉE...).
