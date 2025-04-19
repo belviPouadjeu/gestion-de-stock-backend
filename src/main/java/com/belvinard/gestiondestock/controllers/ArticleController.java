@@ -1,8 +1,8 @@
+
 package com.belvinard.gestiondestock.controllers;
 
 import com.belvinard.gestiondestock.dtos.ArticleDTO;
 import com.belvinard.gestiondestock.dtos.LigneCommandeClientDTO;
-import com.belvinard.gestiondestock.dtos.LigneCommandeFournisseurDTO;
 import com.belvinard.gestiondestock.dtos.LigneVenteDTO;
 import com.belvinard.gestiondestock.exceptions.APIException;
 import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
@@ -123,12 +123,12 @@ public class ArticleController {
         return ResponseEntity.ok(articleService.findHistoriaueCommandeClient(idArticle));
     }
 
-    @Operation(summary = "Historique des commandes fournisseurs",
-            description = "Retourne toutes les commandes fournisseur contenant l'article")
-    @GetMapping("/articles/{idArticle}/commande-fournisseur")
-    public ResponseEntity<List<LigneCommandeFournisseurDTO>> getHistoriqueCommandeFournisseur(@PathVariable Long idArticle) {
-        return ResponseEntity.ok(articleService.findHistoriqueCommandeFournisseur(idArticle));
-    }
+//    @Operation(summary = "Historique des commandes fournisseurs",
+//            description = "Retourne toutes les commandes fournisseur contenant l'article")
+//    @GetMapping("/articles/{idArticle}/commande-fournisseur")
+//    public ResponseEntity<List<LigneCommandeFournisseurDTO>> getHistoriqueCommandeFournisseur(@PathVariable Long idArticle) {
+//        return ResponseEntity.ok(articleService.findHistoriqueCommandeFournisseur(idArticle));
+//    }
 
 
     @ExceptionHandler(ResourceNotFoundException.class)

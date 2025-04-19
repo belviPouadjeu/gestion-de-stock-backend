@@ -31,21 +31,6 @@ public class Article extends AbstractEntity {
   @Column(name = "designation", nullable = false)
   private String designation;
 
-  @NotNull(message = "Le prix unitaire HT est obligatoire")
-  @DecimalMin(value = "0.0", inclusive = false, message = "Le prix unitaire HT doit être positif")
-  @Column(name = "prixunitaireht", nullable = false)
-  private BigDecimal prixUnitaireHt;
-
-  @NotNull(message = "Le taux de TVA est obligatoire")
-  @DecimalMin(value = "0.0", message = "Le taux de TVA ne peut pas être négatif")
-  @Column(name = "tauxtva", nullable = false)
-  private BigDecimal tauxTva;
-
-  @Column(name = "prixunitairettc")
-  private BigDecimal prixUnitaireTtc;
-
-  private String photo;
-
   @ManyToOne(optional = false)
   @JoinColumn(name = "idcategory", nullable = false)
   private Category category;
@@ -61,8 +46,12 @@ public class Article extends AbstractEntity {
   private List<LigneCommandeClient> ligneCommandeClients;
 
   @OneToMany(mappedBy = "article")
-  private List<LigneCommandeFournisseur> ligneCommandeFournisseurs;
+  private List<MvtStk> mvtStks;
+
+  @ManyToOne
+  @JoinColumn(name = "commande_id")
+  private CommandeFournisseur commandeFournisseur;
 
   @OneToMany(mappedBy = "article")
-  private List<MvtStk> mvtStks;
+  private List<LigneCommandeFournisseur> ligneCommandeFournisseurs;
 }

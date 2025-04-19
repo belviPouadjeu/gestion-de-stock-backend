@@ -20,17 +20,16 @@ public class ArticleServiceImpl implements ArticleService {
     private final EntepriseRepository entepriseRepository;
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
-    private final LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository;
     private final LigneCommandeClientRepository ligneCommandeClientRepository;
     private final LigneVenteRepository ligneVenteRepository;
 
     public ArticleServiceImpl(ArticleRepository articleRepository, EntepriseRepository entepriseRepository,
-                              CategoryRepository categoryRepository, ModelMapper modelMapper, LigneVenteRepository venteRepository, LigneCommandeFournisseurRepository commandeFournisseurRepository, LigneCommandeClientRepository commandeClientRepository, LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository, LigneCommandeClientRepository ligneCommandeClientRepository, LigneVenteRepository ligneVenteRepository) {
+                              CategoryRepository categoryRepository, ModelMapper modelMapper, LigneVenteRepository venteRepository,
+                              LigneCommandeClientRepository commandeClientRepository, LigneCommandeClientRepository ligneCommandeClientRepository, LigneVenteRepository ligneVenteRepository) {
         this.articleRepository = articleRepository;
         this.entepriseRepository = entepriseRepository;
         this.categoryRepository = categoryRepository;
         this.modelMapper = modelMapper;
-        this.ligneCommandeFournisseurRepository = ligneCommandeFournisseurRepository;
         this.ligneCommandeClientRepository = ligneCommandeClientRepository;
         this.ligneVenteRepository = ligneVenteRepository;
     }
@@ -53,12 +52,12 @@ public class ArticleServiceImpl implements ArticleService {
         article.setCategory(category);
 
         // Calcul automatique du prix TTC
-        if (article.getPrixUnitaireHt() != null && article.getTauxTva() != null) {
-            BigDecimal tva = article.getPrixUnitaireHt()
-                    .multiply(article.getTauxTva())
-                    .divide(BigDecimal.valueOf(100));
-            article.setPrixUnitaireTtc(article.getPrixUnitaireHt().add(tva));
-        }
+//        if (article.getPrixUnitaireHt() != null && article.getTauxTva() != null) {
+//            BigDecimal tva = article.getPrixUnitaireHt()
+//                    .multiply(article.getTauxTva())
+//                    .divide(BigDecimal.valueOf(100));
+//            article.setPrixUnitaireTtc(article.getPrixUnitaireHt().add(tva));
+//        }
 
         // Sauvegarde
         Article saved = articleRepository.save(article);
@@ -185,10 +184,10 @@ public class ArticleServiceImpl implements ArticleService {
             throw new APIException("Impossible de supprimer un article déjà utilisé dans des commandes client");
         }
 
-        List<LigneCommandeFournisseur> ligneCommandeFournisseurs = ligneCommandeFournisseurRepository.findAllByArticleId(idArticle);
-        if (!ligneCommandeFournisseurs.isEmpty()) {
-            throw new APIException("Impossible de supprimer un article déjà utilisé dans des commandes fournisseur");
-        }
+//        List<LigneCommandeFournisseur> ligneCommandeFournisseurs = ligneCommandeFournisseurRepository.findAllByArticleId(idArticle);
+//        if (!ligneCommandeFournisseurs.isEmpty()) {
+//            throw new APIException("Impossible de supprimer un article déjà utilisé dans des commandes fournisseur");
+//        }
 
         List<LigneVente> ligneVentes = ligneVenteRepository.findAllByArticleId(idArticle);
         if (!ligneVentes.isEmpty()) {
@@ -270,17 +269,17 @@ public class ArticleServiceImpl implements ArticleService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<LigneCommandeFournisseurDTO> findHistoriqueCommandeFournisseur(Long idArticle) {
-        Article article = articleRepository.findById(idArticle)
-                .orElseThrow(() -> new ResourceNotFoundException("Article", "id", idArticle));
-
-        List<LigneCommandeFournisseur> lignes = ligneCommandeFournisseurRepository.findAllByArticleId(idArticle);
-
-        return lignes.stream()
-                .map(ligne -> modelMapper.map(ligne, LigneCommandeFournisseurDTO.class))
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public List<LigneCommandeFournisseurDTO> findHistoriqueCommandeFournisseur(Long idArticle) {
+//        Article article = articleRepository.findById(idArticle)
+//                .orElseThrow(() -> new ResourceNotFoundException("Article", "id", idArticle));
+//
+//        List<LigneCommandeFournisseur> lignes = ligneCommandeFournisseurRepository.findAllByArticleId(idArticle);
+//
+//        return lignes.stream()
+//                .map(ligne -> modelMapper.map(ligne, LigneCommandeFournisseurDTO.class))
+//                .collect(Collectors.toList());
+//    }
 
 
 }

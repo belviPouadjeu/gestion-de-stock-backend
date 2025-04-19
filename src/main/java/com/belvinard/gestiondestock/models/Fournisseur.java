@@ -6,20 +6,23 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Email;
 
 import java.util.List;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "fournisseur")
 public class Fournisseur extends AbstractEntity {
 
   @NotBlank(message = "Le nom du client est obligatoire")
-  @Size(min = 5, max = 100, message = "Le nom doit contenir entre 5 et 100 caractères")
+  @Size(min = 4, max = 100, message = "Le nom doit contenir entre 4 et 100 caractères")
   @Column(name = "nom")
   private String nom;
 
@@ -52,7 +55,7 @@ public class Fournisseur extends AbstractEntity {
   private String numTel;
 
   @ManyToOne
-  @JoinColumn(name = "entrepriseiId")
+  @JoinColumn(name = "entrepriseId")
   private Entreprise entreprise;
 
   @OneToMany(mappedBy = "fournisseur")

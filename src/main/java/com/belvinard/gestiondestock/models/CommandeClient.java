@@ -26,10 +26,6 @@ public class CommandeClient extends AbstractEntity {
   @Column(name = "code")
   private String code;
 
-  @NotNull(message = "La date de commande est obligatoire")
-  @Column(name = "datecommande")
-  private LocalDateTime dateCommande;
-
   @Column(name = "etatcommande")
   @Enumerated(EnumType.STRING)
   private EtatCommande etatCommande;

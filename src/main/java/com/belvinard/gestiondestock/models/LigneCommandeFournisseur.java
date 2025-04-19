@@ -9,37 +9,46 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "lignecommandefournisseur")
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "ligneCommandeFournisseurs")
 public class LigneCommandeFournisseur extends AbstractEntity {
 
-  @NotNull(message = "L'article est obligatoire")
-  @ManyToOne
-  @JoinColumn(name = "idarticle")
-  private Article article;
+    @NotNull(message = "Le prix unitaire HT est obligatoire")
+    @DecimalMin(value = "1.0", message = "Le prix unitaire HT doit être au moins 1")
+    private BigDecimal prixUnitaireHt;
 
-  @NotNull(message = "La commande fournisseur est obligatoire")
-  @ManyToOne
-  @JoinColumn(name = "idcommandefournisseur")
-  private CommandeFournisseur commandeFournisseur;
+    @NotNull(message = "Le taux de TVA est obligatoire")
+    @DecimalMin(value = "0.0", message = "Le taux de TVA ne peut pas être négatif")
+    private BigDecimal tauxTva;
 
-  @NotNull(message = "La quantité est obligatoire")
-  @DecimalMin(value = "0.01", message = "La quantité doit être supérieure à zéro")
-  @Column(name = "quantite")
-  private BigDecimal quantite;
+    @DecimalMin(value = "1.0", message = "Le prix unitaire TTC doit être au moins 1")
+    private BigDecimal prixUnitaireTtc;
 
-  @NotNull(message = "Le prix unitaire est obligatoire")
-  @DecimalMin(value = "0.01", message = "Le prix unitaire doit être supérieur à zéro")
-  @Column(name = "prixunitaire")
-  private BigDecimal prixUnitaire;
+    @NotNull(message = "La quantité est obligatoire")
+    @DecimalMin(value = "0.1", message = "La quantité doit être supérieure à 0")
+    private BigDecimal quantite;
 
-  @NotNull(message = "L'entreprise est obligatoire")
-  @ManyToOne
-  @JoinColumn(name = "identreprise")
-  private Entreprise entreprise;
+    private String photo;
+
+    @ManyToOne
+    @JoinColumn(name = "commande_id", nullable = false)
+    private CommandeFournisseur commandeFournisseur;
+
+    @ManyToOne
+    @JoinColumn(name = "article_id", nullable = false)
+    private Article article;
+
+    @PrePersist
+    @PreUpdate
+    public void calculerPrixTtc() {
+        if (prixUnitaireHt != null && tauxTva != null) {
+            this.prixUnitaireTtc = prixUnitaireHt.add(prixUnitaireHt.multiply(tauxTva).divide(BigDecimal.valueOf(100)));
+        }
+    }
 }

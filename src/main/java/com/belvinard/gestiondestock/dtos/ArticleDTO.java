@@ -28,19 +28,6 @@ public class ArticleDTO {
     @Size(min = 4, max = 100, message = "La désignation doit etre entre 4 et 100 caractères")
     private String designation;
 
-    @NotNull(message = "Le prix unitaire HT est obligatoire")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Le prix unitaire HT doit être positif")
-    private BigDecimal prixUnitaireHt;
-
-    @NotNull(message = "Le taux de TVA est obligatoire")
-    @DecimalMin(value = "0.0", message = "Le taux de TVA ne peut pas être négatif")
-    private BigDecimal tauxTva;
-
-    // Le prix TTC peut être calculé automatiquement, donc pas forcément à valider ici
-    private BigDecimal prixUnitaireTtc;
-
-    private String photo;
-
     @Schema(hidden = true)
     private Long categoryId;
 
@@ -51,9 +38,28 @@ public class ArticleDTO {
     private Long entrepriseId;
 
     @Schema(hidden = true)
+    private EntrepriseDTO entrepriseDetails;
+
+    @Schema(hidden = true)
     private LocalDateTime creationDate;
 
     @Schema(hidden = true)
     private LocalDateTime lastModifiedDate;
+
+    public Long getEntrepriseId() {
+        return entrepriseId;
+    }
+
+    public void setEntrepriseId(Long entrepriseId) {
+        this.entrepriseId = entrepriseId;
+    }
+
+    public EntrepriseDTO getEntrepriseDetails() {
+        return entrepriseDetails;
+    }
+
+    public void setEntrepriseDetails(EntrepriseDTO entrepriseDetails) {
+        this.entrepriseDetails = entrepriseDetails;
+    }
 }
 

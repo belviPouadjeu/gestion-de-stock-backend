@@ -38,25 +38,34 @@ public class LigneCommandeClientServiceImpl implements LigneCommandeClientServic
 
     @Override
     public LigneCommandeClientDTO createLigneCommandeClient(Long commandeId, Long articleId, LigneCommandeClientDTO ligneDTO) {
+
+        // Récupération de la commande client
         CommandeClient commande = commandeClientRepository.findById(commandeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Commande client non trouvée avec l'id " + commandeId));
 
+        // Récupération de l'article
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Article non trouvé avec l'id " + articleId));
 
-        Entreprise entreprise = entrepriseRepository.findById(ligneDTO.getEntrepriseId())
-                .orElseThrow(() -> new ResourceNotFoundException("Entreprise non trouvée avec l'id " + ligneDTO.getEntrepriseId()));
-
+        // Création de l'entité LigneCommandeClient
         LigneCommandeClient ligne = new LigneCommandeClient();
+        ligne.setQuantite(ligneDTO.getQuantite());
+        ligne.setPrixUnitaire(ligneDTO.getPrixUnitaire());
         ligne.setCommandeClient(commande);
         ligne.setArticle(article);
-        ligne.setEntreprise(entreprise);
-        ligne.setPrixUnitaire(ligneDTO.getPrixUnitaire());
-        ligne.setQuantite(ligneDTO.getQuantite());
 
+        // Sauvegarde
         LigneCommandeClient saved = ligneCommandeClientRepository.save(ligne);
 
-        return modelMapper.map(saved, LigneCommandeClientDTO.class);
+        // Retour du DTO
+        LigneCommandeClientDTO response = new LigneCommandeClientDTO();
+        response.setId(saved.getId());
+        response.setQuantite(saved.getQuantite());
+        response.setPrixUnitaire(saved.getPrixUnitaire());
+        response.setCommandeClientId(commande.getId());
+        response.setArticleId(article.getId());
+
+        return response;
     }
 
 
@@ -71,13 +80,9 @@ public class LigneCommandeClientServiceImpl implements LigneCommandeClientServic
             Article article = articleRepository.findById(ligneDTO.getArticleDetails().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Article non trouvé avec l'id " + ligneDTO.getArticleDetails().getId()));
 
-            Entreprise entreprise = entrepriseRepository.findById(ligneDTO.getEntrepriseId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Entreprise non trouvée avec l'id " + ligneDTO.getEntrepriseId()));
 
             LigneCommandeClient ligne = new LigneCommandeClient();
             ligne.setCommandeClient(commande);
-            ligne.setArticle(article);
-            ligne.setEntreprise(entreprise);
             ligne.setPrixUnitaire(ligneDTO.getPrixUnitaire());
             ligne.setQuantite(ligneDTO.getQuantite());
 

@@ -2,6 +2,7 @@ package com.belvinard.gestiondestock.dtos;
 
 import com.belvinard.gestiondestock.models.Adresse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -16,10 +17,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FournisseurDTO {
+    @Schema(hidden = true)
     private Long id;
 
     @NotBlank(message = "Le nom du client est obligatoire")
-    @Size(min = 5, max = 100, message = "Le nom doit contenir entre 5 et 100 caractères")
+    @Size(min = 4, max = 100, message = "Le nom doit contenir entre 4 et 100 caractères")
     private String nom;
 
     @NotBlank(message = "Le prénom du client est obligatoire")
@@ -38,6 +40,10 @@ public class FournisseurDTO {
     @Pattern(regexp = "^[0-9+\\s().-]{6,20}$", message = "Le numéro de téléphone doit...")
     private String numTel;
 
+    @Schema(hidden = true)
+    private EntrepriseDTO entrepriseDetails;
+
+    @Schema(hidden = true)
     private Long entrepriseId;
 
     @JsonIgnore

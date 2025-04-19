@@ -2,7 +2,6 @@ package com.belvinard.gestiondestock.services;
 
 import com.belvinard.gestiondestock.dtos.ArticleDTO;
 import com.belvinard.gestiondestock.dtos.LigneCommandeClientDTO;
-import com.belvinard.gestiondestock.dtos.LigneCommandeFournisseurDTO;
 import com.belvinard.gestiondestock.dtos.LigneVenteDTO;
 
 import java.util.List;
@@ -23,7 +22,7 @@ public interface ArticleService {
 
  List<LigneCommandeClientDTO> findHistoriaueCommandeClient(Long idArticle);
 
- List<LigneCommandeFournisseurDTO> findHistoriqueCommandeFournisseur(Long idArticle);
+
 
 
 

@@ -1,6 +1,7 @@
 package com.belvinard.gestiondestock.dtos;
 
 import com.belvinard.gestiondestock.models.Adresse;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -8,14 +9,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class EntrepriseDTO {
+    @Schema(hidden=true)
     private Long id;
 
     @NotBlank(message = "Le nom de l'entreprise est obligatoire")
-    @Size(min = 5, max = 100, message = "Le nom doit contenir entre 2 et 100 caractères")
+    @Size(min = 4, max = 100, message = "Le nom doit contenir entre 4 et 100 caractères")
     private String nom;
 
     @NotBlank(message = "La description est obligatoire")
@@ -40,6 +44,12 @@ public class EntrepriseDTO {
 
     @Size(max = 150, message = "Le site web doit contenir au maximum 150 caractères")
     private String steWeb;
+
+    @Schema(hidden = true)
+    private LocalDateTime creationDate;
+
+    @Schema(hidden = true)
+    private LocalDateTime lastModifiedDate;
 
 
 }
