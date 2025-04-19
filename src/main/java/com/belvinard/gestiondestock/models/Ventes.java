@@ -28,10 +28,6 @@ public class Ventes extends AbstractEntity {
   @Column(name = "code")
   private String code;
 
-  @NotNull(message = "La date de vente est obligatoire")
-  @Column(name = "datevente")
-  private LocalDateTime dateVente;
-
   @Size(max = 500, message = "Le commentaire ne doit pas dépasser 500 caractères")
   @Column(name = "commentaire")
   private String commentaire;

@@ -16,4 +16,7 @@ public interface VentesService {
 
   VentesDTO delete(Long id);
 
+  VentesDTO updateVente(Long id, VentesDTO ventesDTO);
+
 }
+

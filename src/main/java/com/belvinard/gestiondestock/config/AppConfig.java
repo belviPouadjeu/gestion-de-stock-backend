@@ -43,18 +43,6 @@ public class AppConfig {
             m.map(src -> src.getCommandeClient().getId(), LigneCommandeClientDTO::setCommandeClientId);
         });
 
-
-//        TypeMap<LigneCommandeClient, LigneCommandeClientDTO> ligneMap = mapper.createTypeMap(LigneCommandeClient.class,
-//                LigneCommandeClientDTO.class);
-//        ligneMap.addMappings(m -> {
-//            m.map(src -> src.getArticle(), LigneCommandeClientDTO::setArticleDetails);
-//            m.map(src -> src.getCommandeClient().getId(), LigneCommandeClientDTO::setCommandeClientId);
-//            m.map(src -> src.getCommandeClient(), LigneCommandeClientDTO::setCommandeClientDetails);
-//
-//        });
-
-
-
         // 🎯 Article → DTO
         TypeMap<Article, ArticleDTO> articleMap = mapper.createTypeMap(Article.class, ArticleDTO.class);
         articleMap.addMappings(m -> {
@@ -97,6 +85,41 @@ public class AppConfig {
             m.map(src -> src.getArticle().getId(), LigneCommandeFournisseurDTO::setArticleId);
             m.map(LigneCommandeFournisseur::getArticle, LigneCommandeFournisseurDTO::setArticleDetails);
         });
+
+//        TypeMap<Ventes, VentesDTO> ventesMap = mapper.createTypeMap(Ventes.class, VentesDTO.class);
+//        ventesMap.addMappings(m -> {
+//            m.map(Ventes::getIdEntreprise, VentesDTO::setEntrepriseId);
+//            m.map(Ventes::getLigneVentes, VentesDTO::setLigneVentes);
+//            m.map(Ventes::getDateVente, VentesDTO::setDateVente); // 👈 à ajouter dans le DTO
+//        });
+//
+//        TypeMap<VentesDTO, Ventes> ventesDtoToEntity = mapper.createTypeMap(VentesDTO.class, Ventes.class);
+//        ventesDtoToEntity.addMappings(m -> {
+//            m.map(VentesDTO::getEntrepriseId, Ventes::setIdEntreprise);
+//            m.map(VentesDTO::getDateVente, Ventes::setDateVente); // 👈 aussi ici
+//        });
+
+//        TypeMap<LigneVente, LigneVenteDTO> ligneVenteMap = mapper.createTypeMap(LigneVente.class, LigneVenteDTO.class);
+//        ligneVenteMap.addMappings(m -> {
+//            m.map(src -> src.getArticle(), LigneVenteDTO::setArticle);
+//            m.map(src -> src.getEntreprise().getId(), LigneVenteDTO::setEntrepriseId);
+//            m.map(src -> src.getVente().getId(), LigneVenteDTO::setVenteId); // à ajouter dans DTO si nécessaire
+//
+//        });
+
+        TypeMap<LigneVente, LigneVenteDTO> ligneVenteMap = mapper.createTypeMap(LigneVente.class, LigneVenteDTO.class);
+        ligneVenteMap.addMappings(m -> {
+            m.map(src -> src.getArticle().getId(), LigneVenteDTO::setArticleId);
+            m.map(src -> src.getArticle(), LigneVenteDTO::setArticleDetails);
+            m.map(src -> src.getVente().getId(), LigneVenteDTO::setVenteId);
+            m.map(src -> src.getVente(), LigneVenteDTO::setVenteDetails);
+            m.map(src -> src.getEntreprise().getId(), LigneVenteDTO::setEntrepriseId);
+            m.map(src -> src.getEntreprise(), LigneVenteDTO::setEntrepriseDetails); // 👈 Ici
+        });
+
+
+
+
 
 
 

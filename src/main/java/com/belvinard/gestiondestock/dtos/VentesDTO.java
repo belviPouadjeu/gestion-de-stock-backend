@@ -1,5 +1,6 @@
 package com.belvinard.gestiondestock.dtos;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -21,8 +22,12 @@ public class VentesDTO {
     @Size(min = 2, max = 50, message = "Le code doit contenir entre 2 et 50 caractères")
     private String code;
 
-    @NotNull(message = "La date de vente est obligatoire")
-    private LocalDateTime dateVente;
+    @Schema(hidden = true)
+    private LocalDateTime creationDate;
+
+    @Schema(hidden = true)
+    private LocalDateTime lastModifiedDate;
+
 
     @Size(max = 500, message = "Le commentaire ne doit pas dépasser 500 caractères")
     private String commentaire;
