@@ -86,6 +86,15 @@ public class AppConfig {
             m.map(LigneCommandeFournisseur::getArticle, LigneCommandeFournisseurDTO::setArticleDetails);
         });
 
+        TypeMap<Vente, VenteDTO> venteMap = mapper.createTypeMap(Vente.class, VenteDTO.class);
+
+        venteMap.addMappings(m -> {
+            m.map(Vente::getEntreprise, VenteDTO::setEntrepriseDetails);
+            m.map(src -> src.getEntreprise().getId(), VenteDTO::setIdEntreprise);
+        });
+
+
+
 //        TypeMap<Ventes, VentesDTO> ventesMap = mapper.createTypeMap(Ventes.class, VentesDTO.class);
 //        ventesMap.addMappings(m -> {
 //            m.map(Ventes::getIdEntreprise, VentesDTO::setEntrepriseId);
@@ -107,15 +116,15 @@ public class AppConfig {
 //
 //        });
 
-        TypeMap<LigneVente, LigneVenteDTO> ligneVenteMap = mapper.createTypeMap(LigneVente.class, LigneVenteDTO.class);
-        ligneVenteMap.addMappings(m -> {
-            m.map(src -> src.getArticle().getId(), LigneVenteDTO::setArticleId);
-            m.map(src -> src.getArticle(), LigneVenteDTO::setArticleDetails);
-            m.map(src -> src.getVente().getId(), LigneVenteDTO::setVenteId);
-            m.map(src -> src.getVente(), LigneVenteDTO::setVenteDetails);
-            m.map(src -> src.getEntreprise().getId(), LigneVenteDTO::setEntrepriseId);
-            m.map(src -> src.getEntreprise(), LigneVenteDTO::setEntrepriseDetails); // 👈 Ici
-        });
+//        TypeMap<LigneVente, LigneVenteDTO> ligneVenteMap = mapper.createTypeMap(LigneVente.class, LigneVenteDTO.class);
+//        ligneVenteMap.addMappings(m -> {
+//            m.map(src -> src.getArticle().getId(), LigneVenteDTO::setArticleId);
+//            m.map(src -> src.getArticle(), LigneVenteDTO::setArticleDetails);
+//            m.map(src -> src.getVente().getId(), LigneVenteDTO::setVenteId);
+//            m.map(src -> src.getVente(), LigneVenteDTO::setVenteDetails);
+//            m.map(src -> src.getEntreprise().getId(), LigneVenteDTO::setEntrepriseId);
+//            m.map(src -> src.getEntreprise(), LigneVenteDTO::setEntrepriseDetails); // 👈 Ici
+//        });
 
 
 

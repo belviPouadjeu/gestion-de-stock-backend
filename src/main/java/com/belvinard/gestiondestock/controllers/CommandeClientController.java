@@ -4,10 +4,9 @@ import com.belvinard.gestiondestock.dtos.CommandeClientDTO;
 import com.belvinard.gestiondestock.dtos.LigneCommandeClientDTO;
 import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
 import com.belvinard.gestiondestock.models.EtatCommande;
-import com.belvinard.gestiondestock.responses.MyErrorResponses;
+import com.belvinard.gestiondestock.responses.ErrorResponse;
 import com.belvinard.gestiondestock.services.CommandeClientService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -131,45 +130,6 @@ public class CommandeClientController {
     public ResponseEntity<CommandeClientDTO> deleteCommandeClient(@PathVariable Long id) {
         return ResponseEntity.ok(commandeClientService.deleteCommandeClient(id));
     }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-        // Log l'exception pour le débogage.
-        System.err.println("Erreur de format JSON: " + ex.getMessage());
-
-        // Retourne une réponse d'erreur appropriée.
-        return ResponseEntity.badRequest().body("Format JSON invalide. Les noms des champs doivent être entourés de guillemets doubles.");
-    }
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<MyErrorResponses> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        MyErrorResponses errorResponse = new MyErrorResponses("NOT_FOUND", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<MyErrorResponses> handleValidationException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());  // Collect field errors
-        }
-
-        MyErrorResponses errorResponse = new MyErrorResponses(
-                "BAD_REQUEST",
-                "Validation failed. Please correct the errors.",
-                errors
-        );
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-
-
-
-
-
-
-
 
 
 }

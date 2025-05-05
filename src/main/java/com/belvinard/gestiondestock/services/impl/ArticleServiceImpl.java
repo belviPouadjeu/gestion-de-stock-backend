@@ -240,21 +240,21 @@ public class ArticleServiceImpl implements ArticleService {
         }).collect(Collectors.toList());
     }
 
-    @Override
-    public List<LigneVenteDTO> findHistoriqueVentes(Long idArticle) {
-
-        // Vérifie si l'article existe
-        Article article = articleRepository.findById(idArticle)
-                .orElseThrow(() -> new ResourceNotFoundException("Article", "id", idArticle));
-
-        // Récupère toutes les lignes de vente associées à l'article
-        List<LigneVente> lignesVente = ligneVenteRepository.findAllByArticleId(idArticle);
-
-        //Mappe les entités LigneVente vers des DTOs LigneVenteDTO
-        return lignesVente.stream()
-                .map(ligneVente -> modelMapper.map(ligneVente, LigneVenteDTO.class))
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public List<LigneVenteDTO> findHistoriqueVentes(Long idArticle) {
+//
+//        // Vérifie si l'article existe
+//        Article article = articleRepository.findById(idArticle)
+//                .orElseThrow(() -> new ResourceNotFoundException("Article", "id", idArticle));
+//
+//        // Récupère toutes les lignes de vente associées à l'article
+//        List<LigneVente> lignesVente = ligneVenteRepository.findAllByArticleId(idArticle);
+//
+//        //Mappe les entités LigneVente vers des DTOs LigneVenteDTO
+//        return lignesVente.stream()
+//                .map(ligneVente -> modelMapper.map(ligneVente, LigneVenteDTO.class))
+//                .collect(Collectors.toList());
+//    }
 
 
     @Override

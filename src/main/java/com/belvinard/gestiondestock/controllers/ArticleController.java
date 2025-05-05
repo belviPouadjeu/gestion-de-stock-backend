@@ -3,10 +3,10 @@ package com.belvinard.gestiondestock.controllers;
 
 import com.belvinard.gestiondestock.dtos.ArticleDTO;
 import com.belvinard.gestiondestock.dtos.LigneCommandeClientDTO;
-import com.belvinard.gestiondestock.dtos.LigneVenteDTO;
+//import com.belvinard.gestiondestock.dtos.LigneVenteDTO;
 import com.belvinard.gestiondestock.exceptions.APIException;
 import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
-import com.belvinard.gestiondestock.responses.MyErrorResponses;
+import com.belvinard.gestiondestock.responses.ErrorResponse;
 import com.belvinard.gestiondestock.services.ArticleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -109,12 +109,12 @@ public class ArticleController {
         return ResponseEntity.ok(articles);
     }
 
-    @Operation(summary = "Historique des ventes pour un article",
-            description = "Retourne toutes les ventes liées à un article donné")
-    @GetMapping("/articles/{idArticle}/vente")
-    public ResponseEntity<List<LigneVenteDTO>> getHistoriqueVente(@PathVariable Long idArticle) {
-        return ResponseEntity.ok(articleService.findHistoriqueVentes(idArticle));
-    }
+//    @Operation(summary = "Historique des ventes pour un article",
+//            description = "Retourne toutes les ventes liées à un article donné")
+//    @GetMapping("/articles/{idArticle}/vente")
+//    public ResponseEntity<List<LigneVenteDTO>> getHistoriqueVente(@PathVariable Long idArticle) {
+//        return ResponseEntity.ok(articleService.findHistoriqueVentes(idArticle));
+//    }
 
     @Operation(summary = "Historique des commandes clients",
             description = "Retourne toutes les commandes client contenant l'article")
@@ -123,36 +123,30 @@ public class ArticleController {
         return ResponseEntity.ok(articleService.findHistoriaueCommandeClient(idArticle));
     }
 
-//    @Operation(summary = "Historique des commandes fournisseurs",
-//            description = "Retourne toutes les commandes fournisseur contenant l'article")
-//    @GetMapping("/articles/{idArticle}/commande-fournisseur")
-//    public ResponseEntity<List<LigneCommandeFournisseurDTO>> getHistoriqueCommandeFournisseur(@PathVariable Long idArticle) {
-//        return ResponseEntity.ok(articleService.findHistoriqueCommandeFournisseur(idArticle));
+
+
+//    @ExceptionHandler(ResourceNotFoundException.class)
+//    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
+//        ErrorResponse errorResponse = new ErrorResponse("NOT_FOUND", ex.getMessage());
+//        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 //    }
-
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<MyErrorResponses> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        MyErrorResponses errorResponse = new MyErrorResponses("NOT_FOUND", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Map<String, String>> handleValidationException(ConstraintViolationException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getConstraintViolations().forEach(violation ->
-                errors.put(violation.getPropertyPath().toString(), violation.getMessage())
-        );
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-    }
-
-    @ExceptionHandler(APIException.class)
-    public ResponseEntity<MyErrorResponses> myAPIException(APIException ex) {
-        MyErrorResponses errorResponse = new MyErrorResponses("BAD_REQUEST", ex.getMessage());
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
+//
+//    @ExceptionHandler(ConstraintViolationException.class)
+//    public ResponseEntity<Map<String, String>> handleValidationException(ConstraintViolationException ex) {
+//        Map<String, String> errors = new HashMap<>();
+//        ex.getConstraintViolations().forEach(violation ->
+//                errors.put(violation.getPropertyPath().toString(), violation.getMessage())
+//        );
+//
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+//    }
+//
+//    @ExceptionHandler(APIException.class)
+//    public ResponseEntity<ErrorResponse> myAPIException(APIException ex) {
+//        ErrorResponse errorResponse = new ErrorResponse("BAD_REQUEST", ex.getMessage());
+//
+//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//    }
 
 
 }

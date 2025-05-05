@@ -3,7 +3,7 @@ package com.belvinard.gestiondestock.controllers;
 
 import com.belvinard.gestiondestock.dtos.LigneCommandeClientDTO;
 import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
-import com.belvinard.gestiondestock.responses.MyErrorResponses;
+import com.belvinard.gestiondestock.responses.ErrorResponse;
 import com.belvinard.gestiondestock.services.LigneCommandeClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -45,24 +45,6 @@ public class LigneCommandeClientController {
                 .createLigneCommandeClient(commandeId, articleId, ligneDTO);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
-//    @PostMapping("/lignes-commandes")
-//    public ResponseEntity<LigneCommandeClientDTO> createLigneCommandeClient(
-//            @RequestParam Long commandeId,
-//            @RequestParam Long articleId,
-//            @RequestBody @Valid LigneCommandeClientDTO ligneDTO) {
-//
-//        LigneCommandeClientDTO created = ligneCommandeClientService.createLigneCommandeClient(commandeId, articleId, ligneDTO);
-//        return new ResponseEntity<>(created, HttpStatus.CREATED);
-//    }
-
-//    @PostMapping("/{commandeId}/{articleId}")
-//    public ResponseEntity<LigneCommandeClientDTO> createLigne(
-//            @PathVariable Long commandeId,
-//            @PathVariable Long articleId,
-//            @RequestBody @Valid LigneCommandeClientDTO dto) {
-//
-//        return ResponseEntity.ok(service.createLigneCommandeClient(commandeId, articleId, dto));
-//    }
 
     /**
      * Enregistre plusieurs lignes de commande pour une commande donnée.
@@ -130,29 +112,6 @@ public class LigneCommandeClientController {
     })
     public ResponseEntity<List<LigneCommandeClientDTO>> getAll() {
         return ResponseEntity.ok(ligneCommandeClientService.findAll());
-    }
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<MyErrorResponses> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        MyErrorResponses errorResponse = new MyErrorResponses("NOT_FOUND", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    // ✅ Handle validation errors
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<MyErrorResponses> handleValidationException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());  // Collect field errors
-        }
-
-        MyErrorResponses errorResponse = new MyErrorResponses(
-                "BAD_REQUEST",
-                "Validation failed. Please correct the errors.",
-                errors
-        );
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 

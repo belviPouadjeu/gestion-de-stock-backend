@@ -3,7 +3,7 @@ package com.belvinard.gestiondestock.controllers;
 import com.belvinard.gestiondestock.dtos.FournisseurDTO;
 import com.belvinard.gestiondestock.exceptions.APIException;
 import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
-import com.belvinard.gestiondestock.responses.MyErrorResponses;
+import com.belvinard.gestiondestock.responses.ErrorResponse;
 import com.belvinard.gestiondestock.services.FournisseurService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -102,36 +102,36 @@ public class FournisseurController {
         return ResponseEntity.ok(fournisseurService.delete(id));
     }
 
-    @ExceptionHandler(APIException.class)
-    public ResponseEntity<MyErrorResponses> myAPIException(APIException ex) {
-        MyErrorResponses errorResponse = new MyErrorResponses("BAD_REQUEST", ex.getMessage());
+//    @ExceptionHandler(APIException.class)
+//    public ResponseEntity<ErrorResponse> myAPIException(APIException ex) {
+//        ErrorResponse errorResponse = new ErrorResponse("BAD_REQUEST", ex.getMessage());
+//
+//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//    }
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    // ✅ Handle validation errors
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<MyErrorResponses> handleValidationException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());  // Collect field errors
-        }
-
-        MyErrorResponses errorResponse = new MyErrorResponses(
-                "BAD_REQUEST",
-                "Validation failed. Please correct the errors.",
-                errors
-        );
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<MyErrorResponses> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        MyErrorResponses errorResponse = new MyErrorResponses("NOT_FOUND", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
+//    // ✅ Handle validation errors
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
+//        Map<String, String> errors = new HashMap<>();
+//        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+//            errors.put(error.getField(), error.getDefaultMessage());  // Collect field errors
+//        }
+//
+//        ErrorResponse errorResponse = new ErrorResponse(
+//                "BAD_REQUEST",
+//                "Validation failed. Please correct the errors.",
+//                errors
+//        );
+//
+//        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//    }
+//
+//    @ExceptionHandler(ResourceNotFoundException.class)
+//    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
+//        ErrorResponse errorResponse = new ErrorResponse("NOT_FOUND", ex.getMessage());
+//        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+//    }
+//
 
 
 }
