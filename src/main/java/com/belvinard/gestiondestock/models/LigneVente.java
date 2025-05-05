@@ -21,7 +21,7 @@ public class LigneVente extends AbstractEntity {
   @NotNull(message = "La vente est obligatoire")
   @ManyToOne
   @JoinColumn(name = "idvente")
-  private Ventes vente;
+  private Vente vente;
 
   @NotNull(message = "L'article est obligatoire")
   @ManyToOne

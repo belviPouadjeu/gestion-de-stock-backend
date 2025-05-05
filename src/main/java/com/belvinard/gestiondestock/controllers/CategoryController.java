@@ -5,7 +5,7 @@ import com.belvinard.gestiondestock.exceptions.APIException;
 import com.belvinard.gestiondestock.exceptions.DuplicateEntityException;
 import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
 import com.belvinard.gestiondestock.responses.CategoryResponse;
-import com.belvinard.gestiondestock.responses.MyErrorResponses;
+import com.belvinard.gestiondestock.responses.ErrorResponse;
 import com.belvinard.gestiondestock.services.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,21 +30,6 @@ import java.util.Map;
 public class CategoryController {
 
     private final CategoryService categoryService;
-
-//    @Operation(
-//        summary = "Rechercher une catégorie par désignation",
-//        description = "Permet de rechercher une catégorie à partir de sa désignation"
-//    )
-//    @ApiResponses(value = {
-//        @ApiResponse(responseCode = "200", description = "Catégorie trouvée"),
-//        @ApiResponse(responseCode = "404", description = "Catégorie non trouvée")
-//    })
-//    @GetMapping("/designation/{designation}")
-//    public ResponseEntity<CategoryDTO> getByDesignation(
-//            @Parameter(description = "La désignation de la catégorie") @PathVariable String designation) {
-//        CategoryDTO categoryDTO = categoryService.findByDesignation(designation);
-//        return ResponseEntity.ok(categoryDTO);
-//    }
 
     @Operation(summary = "Rechercher une catégorie par désignation")
     @ApiResponses({
@@ -107,40 +92,6 @@ public class CategoryController {
         return ResponseEntity.ok(deleted);
     }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<MyErrorResponses> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        MyErrorResponses errorResponse = new MyErrorResponses("NOT_FOUND", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
 
-    @ExceptionHandler(APIException.class)
-    public ResponseEntity<MyErrorResponses> myAPIException(APIException ex) {
-        MyErrorResponses errorResponse = new MyErrorResponses("BAD_REQUEST", ex.getMessage());
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(DuplicateEntityException.class)
-    public ResponseEntity<MyErrorResponses> handleDuplicateEntityException(DuplicateEntityException ex) {
-        MyErrorResponses errorResponse = new MyErrorResponses("CONFLICT", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
-    }
-
-    // ✅ Handle validation errors
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<MyErrorResponses> handleValidationException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());  // Collect field errors
-        }
-
-        MyErrorResponses errorResponse = new MyErrorResponses(
-                "BAD_REQUEST",
-                "Validation failed. Please correct the errors.",
-                errors
-        );
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
 
 }

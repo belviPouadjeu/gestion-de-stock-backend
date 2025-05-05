@@ -2,9 +2,8 @@ package com.belvinard.gestiondestock.controllers;
 
 import com.belvinard.gestiondestock.dtos.CommandeFournisseurDTO;
 import com.belvinard.gestiondestock.exceptions.APIException;
-import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
 import com.belvinard.gestiondestock.models.EtatCommande;
-import com.belvinard.gestiondestock.responses.MyErrorResponses;
+import com.belvinard.gestiondestock.responses.ErrorResponse;
 import com.belvinard.gestiondestock.services.CommandeFournisseurService;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -161,64 +160,5 @@ public class CommandeFournisseurController {
         return ResponseEntity.ok(commandes);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Map<String, String>> handleValidationException(ConstraintViolationException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getConstraintViolations().forEach(violation ->
-                errors.put(violation.getPropertyPath().toString(), violation.getMessage())
-        );
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-    }
-
-    // ✅ Handle validation errors
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<MyErrorResponses> handleValidationException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());  // Collect field errors
-        }
-
-        MyErrorResponses errorResponse = new MyErrorResponses(
-                "BAD_REQUEST",
-                "Validation failed. Please correct the errors.",
-                errors
-        );
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(APIException.class)
-    public ResponseEntity<MyErrorResponses> myAPIException(APIException ex) {
-        MyErrorResponses errorResponse = new MyErrorResponses("BAD_REQUEST", ex.getMessage());
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<MyErrorResponses> handleEntityNotFoundException(EntityNotFoundException ex) {
-        MyErrorResponses errorResponse = new MyErrorResponses("NOT_FOUND", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<MyErrorResponses> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-        MyErrorResponses response;
-
-        if (ex.getCause() instanceof InvalidFormatException invalidFormat) {
-            // Vérifie si l'erreur est liée à une énumération
-            String targetType = invalidFormat.getTargetType().getSimpleName();
-            String invalidValue = invalidFormat.getValue().toString();
-
-            String message = "Valeur invalide '" + invalidValue + "' pour le type " + targetType + ". "
-                    + "Vérifiez que vous utilisez une valeur correcte (ex. VALIDEE, LIVREE...).";
-
-            response = new MyErrorResponses("BAD_REQUEST", message);
-        } else {
-            response = new MyErrorResponses("BAD_REQUEST", "Requête mal formée. (ex. VALIDEE, LIVREE...)");
-        }
-
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
 
 }

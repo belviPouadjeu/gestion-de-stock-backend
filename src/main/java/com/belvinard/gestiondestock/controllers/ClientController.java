@@ -2,7 +2,7 @@ package com.belvinard.gestiondestock.controllers;
 
 import com.belvinard.gestiondestock.dtos.ClientDTO;
 import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
-import com.belvinard.gestiondestock.responses.MyErrorResponses;
+import com.belvinard.gestiondestock.responses.ErrorResponse;
 import com.belvinard.gestiondestock.services.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -95,28 +95,6 @@ public class ClientController {
         return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
     }
 
-//    @Operation(summary = "Créer un client",
-//            description = "Cette opération permet d'enregistrer un nouveau client.",
-//            parameters = {
-//                    @Parameter(
-//                            name = "entrepriseId",
-//                            description = "ID de l'entreprise à laquelle le client sera rattaché",
-//                            required = true,
-//                            example = "1"
-//                    )
-//            }
-//    )
-//    @ApiResponses(value = {
-//        @ApiResponse(responseCode = "201", description = "Client créé avec succès"),
-//        @ApiResponse(responseCode = "400", description = "Données de validation invalides")
-//    })
-//    @PostMapping
-//    public ResponseEntity<ClientDTO> createClient(@Valid @RequestBody ClientDTO clientDTO,
-//                                                  @PathVariable Long entrepriseId) {
-//        ClientDTO savedClient = clientService.createClient(entrepriseId, clientDTO);
-//        return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
-//    }
-
     /**
      * Récupère un client par son ID.
      *
@@ -168,33 +146,6 @@ public class ClientController {
         return ResponseEntity.ok(deletedClient);
     }
 
-    // ✅ Handle validation errors
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<MyErrorResponses> handleValidationException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());  // Collect field errors
-        }
 
-        MyErrorResponses errorResponse = new MyErrorResponses(
-                "BAD_REQUEST",
-                "Validation failed. Please correct the errors.",
-                errors
-        );
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<MyErrorResponses> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        MyErrorResponses errorResponse = new MyErrorResponses("NOT_FOUND", ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-        String message = "Erreur de lecture du JSON : " + ex.getMostSpecificCause().getMessage();
-        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
-    }
 
 }
