@@ -1,6 +1,8 @@
 package com.belvinard.gestiondestock.dtos;
 
+import com.belvinard.gestiondestock.models.EtatVente;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +24,9 @@ public class VenteDTO {
 
     @Schema(hidden = true, description = "Identifiant de l'entreprise associée", example = "1")
     private Long idEntreprise;
+
+    @NotNull(message = "L'état de la vente est obligatoire")
+    private EtatVente etatVente;
 
     // Ce champ est automatiquement rempli côté backend
     @Schema(hidden = true)

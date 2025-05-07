@@ -44,5 +44,28 @@ public class VentesController {
         VenteDTO savedVente = venteService.createVente(entrepriseId, venteDTO);
         return new ResponseEntity<>(savedVente, HttpStatus.CREATED);
     }
+
+    @Operation(summary = "Delete a Vente by ID", description = "Deletes a vente and returns the deleted object")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Vente successfully deleted"),
+            @ApiResponse(responseCode = "404", description = "Vente not found")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<VenteDTO> deleteVente(@PathVariable Long id) {
+        VenteDTO deletedVente = venteService.deleteVente(id);
+        return new ResponseEntity<>(deletedVente, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get a Vente by ID", description = "Retrieves a vente by its ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Vente found"),
+            @ApiResponse(responseCode = "404", description = "Vente not found")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<VenteDTO> getVenteById(@PathVariable Long id) {
+        VenteDTO venteDTO = venteService.findVenteById(id);
+        return ResponseEntity.ok(venteDTO);
+    }
+
 }
 

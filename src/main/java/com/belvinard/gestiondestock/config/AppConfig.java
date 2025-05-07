@@ -93,6 +93,13 @@ public class AppConfig {
             m.map(src -> src.getEntreprise().getId(), VenteDTO::setIdEntreprise);
         });
 
+        TypeMap<LigneVente, LigneVenteDTO> LigneVenteMap = mapper.createTypeMap(LigneVente.class, LigneVenteDTO.class);
+
+        LigneVenteMap .addMappings(m -> {
+            m.map(LigneVente::getArticle, LigneVenteDTO::setArticleDetails);
+            m.map(src -> src.getArticle().getId(), LigneVenteDTO::setIdArticle);
+        });
+
 
 
 //        TypeMap<Ventes, VentesDTO> ventesMap = mapper.createTypeMap(Ventes.class, VentesDTO.class);

@@ -4,7 +4,6 @@ import com.belvinard.gestiondestock.dtos.VenteDTO;
 import com.belvinard.gestiondestock.exceptions.APIException;
 import com.belvinard.gestiondestock.exceptions.ResourceNotFoundException;
 import com.belvinard.gestiondestock.models.Entreprise;
-import com.belvinard.gestiondestock.models.Fournisseur;
 import com.belvinard.gestiondestock.models.Vente;
 import com.belvinard.gestiondestock.repositories.EntrepriseRepository;
 import com.belvinard.gestiondestock.repositories.VentesRepository;
@@ -14,7 +13,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,7 +36,7 @@ public class VenteServiceImpl implements VenteService {
     public VenteResponse getAllVentes() {
        List<Vente> ventes = ventesRepository.findAll();
         if (ventes.isEmpty()){
-            throw new APIException("No projects created until now !");
+            throw new APIException("No ventes created until now !");
         }
 
         List<VenteDTO> venteDTOS = ventes.stream()
@@ -75,5 +73,29 @@ public class VenteServiceImpl implements VenteService {
         return modelMapper.map(savedVente, VenteDTO.class);
     }
 
+    @Override
+    public VenteDTO findVenteById(Long id) {
+        // Retrieve the vente from the database from it ID
+        Vente vente = ventesRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Vente", "venteId", id));
+
+        // Convert the Vente entity to a VenteDTO and return it
+        return modelMapper.map(vente, VenteDTO.class);
+
+    }
+
+    @Override
+    public VenteDTO deleteVente(Long id) {
+        // Retrieve the vente from the database from it ID
+        Vente vente = ventesRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Vente", "venteId", id));
+
+        // Delete the found vente from the database
+        ventesRepository.delete(vente);
+
+        // Convert the deleted vente to a VenteDTO and retrun it
+        return modelMapper.map(vente, VenteDTO.class);
+
+    }
 
 }
