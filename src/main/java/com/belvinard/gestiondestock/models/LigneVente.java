@@ -1,45 +1,39 @@
 package com.belvinard.gestiondestock.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "lignevente")
-public class LigneVente extends AbstractEntity {
+@Data
+@NoArgsConstructor
+public class LigneVente extends AbstractEntity{
 
-  @NotNull(message = "La vente est obligatoire")
-  @ManyToOne
-  @JoinColumn(name = "idvente")
-  private Vente vente;
+    @NotNull(message = "La quantité est obligatoire")
+    @DecimalMin(value = "0.01", message = "La quantité doit être supérieure à zéro")
+    private BigDecimal quantite;
 
-  @NotNull(message = "L'article est obligatoire")
-  @ManyToOne
-  @JoinColumn(name = "idarticle")
-  private Article article;
+    @NotNull(message = "Le prix unitaire est obligatoire")
+    @DecimalMin(value = "0.01", message = "Le prix unitaire doit être supérieur à zéro")
+    private BigDecimal prixUnitaire;
 
-  @NotNull(message = "La quantité est obligatoire")
-  @DecimalMin(value = "0.01", message = "La quantité doit être supérieure à zéro")
-  @Column(name = "quantite")
-  private BigDecimal quantite;
+    @NotNull(message = "La vente est obligatoire")
+    @ManyToOne
+    @JoinColumn(name = "idvente")
+    private Vente vente;
 
-  @NotNull(message = "Le prix unitaire est obligatoire")
-  @DecimalMin(value = "0.01", message = "Le prix unitaire doit être supérieur à zéro")
-  @Column(name = "prixunitaire")
-  private BigDecimal prixUnitaire;
+    @NotNull(message = "L'article est obligatoire")
+    @ManyToOne
+    @JoinColumn(name = "idarticle")
+    private Article article;
 
-  @NotNull(message = "L'entreprise est obligatoire")
-  @ManyToOne
-  @JoinColumn(name = "entrepriseiId")
-  private Entreprise entreprise;
+
 }

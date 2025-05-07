@@ -23,8 +23,9 @@ public class Vente extends AbstractEntity {
   @Size(min = 4, max = 500, message = "Le commentaire est compris entre 500 caractères")
   private String commentaire;
 
-//  @Column(insertable = false, updatable = false)
-//  private Long idEntreprise;
+  @Enumerated(EnumType.STRING)
+  private EtatVente etatVente;
+
 
   @ManyToOne
   @JoinColumn(name = "idEntreprise", referencedColumnName = "id")

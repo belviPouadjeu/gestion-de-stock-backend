@@ -9,7 +9,6 @@ import com.belvinard.gestiondestock.services.ArticleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,17 +20,17 @@ public class ArticleServiceImpl implements ArticleService {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
     private final LigneCommandeClientRepository ligneCommandeClientRepository;
-    private final LigneVenteRepository ligneVenteRepository;
+    //private final LigneVenteRepository ligneVenteRepository;
 
     public ArticleServiceImpl(ArticleRepository articleRepository, EntepriseRepository entepriseRepository,
-                              CategoryRepository categoryRepository, ModelMapper modelMapper, LigneVenteRepository venteRepository,
-                              LigneCommandeClientRepository commandeClientRepository, LigneCommandeClientRepository ligneCommandeClientRepository, LigneVenteRepository ligneVenteRepository) {
+                              CategoryRepository categoryRepository, ModelMapper modelMapper,
+                              LigneCommandeClientRepository commandeClientRepository, LigneCommandeClientRepository ligneCommandeClientRepository) {
         this.articleRepository = articleRepository;
         this.entepriseRepository = entepriseRepository;
         this.categoryRepository = categoryRepository;
         this.modelMapper = modelMapper;
         this.ligneCommandeClientRepository = ligneCommandeClientRepository;
-        this.ligneVenteRepository = ligneVenteRepository;
+        //this.ligneVenteRepository = ligneVenteRepository;
     }
 
    /* ================== CREATE ARTICLE ================== */
@@ -189,10 +188,10 @@ public class ArticleServiceImpl implements ArticleService {
 //            throw new APIException("Impossible de supprimer un article déjà utilisé dans des commandes fournisseur");
 //        }
 
-        List<LigneVente> ligneVentes = ligneVenteRepository.findAllByArticleId(idArticle);
-        if (!ligneVentes.isEmpty()) {
-            throw new APIException("Impossible de supprimer un article déjà utilisé dans des ventes");
-        }
+//        List<LigneVente> ligneVentes = ligneVenteRepository.findAllByArticleId(idArticle);
+//        if (!ligneVentes.isEmpty()) {
+//            throw new APIException("Impossible de supprimer un article déjà utilisé dans des ventes");
+//        }
     }
 
 
