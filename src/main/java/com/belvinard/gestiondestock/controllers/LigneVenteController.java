@@ -89,5 +89,24 @@ public class LigneVenteController {
         return ResponseEntity.ok(updated);
     }
 
+    @Operation(
+            summary = "Supprimer une ligne de vente",
+            description = "Supprime une ligne de vente en fonction de son identifiant. Cette opération est généralement réservée aux administrateurs."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ligne de vente supprimée avec succès",
+                    content = @Content(schema = @Schema(implementation = LigneVenteDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Ligne de vente non trouvée", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Accès refusé à cette opération", content = @Content)
+    })
+    @DeleteMapping("/admin/ligneVente/{ligneVenteId}")
+    public ResponseEntity<LigneVenteDTO> deleteLigneVente(
+            @Parameter(description = "ID de la ligne de vente à supprimer", required = true)
+            @PathVariable Long ligneVenteId) {
+
+        LigneVenteDTO deletedLigneVent = ligneVenteService.deleteLigneVente(ligneVenteId);
+        return new ResponseEntity<>(deletedLigneVent, HttpStatus.OK);
+    }
+
 
 }
