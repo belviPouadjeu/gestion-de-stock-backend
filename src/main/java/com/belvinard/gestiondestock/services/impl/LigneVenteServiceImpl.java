@@ -127,5 +127,18 @@ public class LigneVenteServiceImpl implements LigneVenteService {
         return modelMapper.map(saved, LigneVenteDTO.class);
     }
 
+    @Override
+    public LigneVenteDTO deleteLigneVente(Long ligneVenteId) {
+        LigneVente existingLigne = ligneVenteRepository.findById(ligneVenteId)
+                .orElseThrow(() -> new APIException("Ligne de vente non trouvée avec l'id: " + ligneVenteId));
+
+        ligneVenteRepository.delete(existingLigne);
+
+        // Convert deleted Entity to DTO
+
+        return modelMapper.map(existingLigne, LigneVenteDTO.class);
+
+    }
+
 
 }
