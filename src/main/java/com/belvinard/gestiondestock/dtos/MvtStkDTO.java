@@ -2,6 +2,7 @@ package com.belvinard.gestiondestock.dtos;
 
 import com.belvinard.gestiondestock.models.SourceMvtStk;
 import com.belvinard.gestiondestock.models.TypeMvtStk;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,24 +17,24 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class MvtStkDTO {
 
-    private Integer id;
+    @Schema(hidden = true)
+    private Long id;
 
-    @NotNull(message = "La date du mouvement est obligatoire")
+    @Schema(description = "Date et heure du mouvement de stock", example = "2024-05-09T14:30:00")
     private LocalDateTime dateMvt;
 
-    @NotNull(message = "La quantité est obligatoire")
-    @DecimalMin(value = "0.01", message = "La quantité doit être supérieure à zéro")
+    @Schema(description = "Quantité déplacée lors du mouvement de stock (entrée ou sortie)", example = "5")
     private BigDecimal quantite;
 
-    @NotNull(message = "L'article est obligatoire")
+    @Schema(description = "Article concerné par le mouvement de stock")
     private ArticleDTO article;
 
-    @NotNull(message = "Le type de mouvement est obligatoire")
+    @Schema(description = "Type de mouvement : ENTRÉE ou SORTIE", example = "ENTREE")
     private TypeMvtStk typeMvt;
 
-    @NotNull(message = "La source du mouvement est obligatoire")
+    @Schema(description = "Source à l'origine du mouvement de stock (ex: COMMANDE_CLIENT, COMMANDE_FOURNISSEUR, VENTE)", example = "VENTE")
     private SourceMvtStk sourceMvt;
 
-    @NotNull(message = "L'entreprise est obligatoire")
+    @Schema(description = "Identifiant de l'entreprise liée au mouvement de stock", example = "1")
     private Integer entrepriseId;
 }
